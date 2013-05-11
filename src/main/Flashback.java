@@ -57,6 +57,7 @@ public class Flashback extends PApplet {
 	Renderer renderer;
 
 	/**
+	 * Main driver to kick off the program.
 	 * @param args
 	 */
 	public static void main(String[] args) {
