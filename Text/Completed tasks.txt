@@ -1,0 +1,105 @@
+1/25/2013 11:35
+---------------
+Basic classes written
+Basic player controls
+Ground check added - Scott
+Linear gravity added - Scott
+beating heart for hud - Jeff
+heart beat triggers fire - Jeff
+---------------
+
+
+1/26/2013 2:05
+--------------
+Gravity changed to exponential - Scott
+Basic jumping added - Scott
+Left/Right wall checks - Scott
+Monster class added w/flying - Scott
+Switched player to separate arraylist - SCott
+---------------
+
+
+1/26/2013 10:22
+--------------
+switch all references to either x/y - Scott
+instruction screen - Scott
+---------------
+
+
+1/26/2013 1:28
+---------------
+collision kills enemies - jeff
+heartbeat affects accuracy -- jeff
+---------------
+
+
+1/26/2013 4:06
+---------------
+multiple levels of ground - Scott
+jumping to other levels of terrain - Scott
+not falling through the bottom level - Scott
+require player to be at ground to jump - Scott
+smooth out move down of player - Scott
+---------------
+
+
+1/26/2013 8:04
+---------------
+camera scrolls to follow player - Scott
+flying enemy AI - Jeff
+---------------
+
+
+1/26/2013
+---------------
+pick win/lose conditions
+populate win screen - Scott
+populate lose screen - Scott
+populate instruction screen - Scott
+Win prompt - Scott
+---------------
+
+
+1/27/13 12:11
+---------------
+player dies if heart rate goes too high - Jeff
+heart beat adjusts based on enemies - Jeff
+---------------
+
+
+1/27/13 9:35
+---------------
+lose prompt - Scott
+build a bigger level - Scott
+---------------
+
+
+1/27/13 10:40
+---------------
+adjust player movement based on heart beat - Scott
+Splash screen - Scott
+---------------
+
+1/27/13 12:30
+---------------
+ground enemy AI - Scott
+---------------
+
+1/27/13 2:00
+---------------
+Art - Jeff
+Sound - Jeff
+adjust player/bullet/movement/gravity speeds
+---------------
+
+
+1/27/13
+---------------
+Music - Jeff
+---------------
+
+5/5/13
+---------------
+Converted to Eclipse - Scott
+General refactoring - Scott
+---------------

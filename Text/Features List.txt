@@ -1,0 +1,13 @@
+New heartbeat mechanic
+Make splash screen work better
+Make player fire manually
+Animate player
+Animate monsters
+Draw platforms
+Refactor physics
+Create platforms better
+Integrate with Tiled (JSON, XML, etc level editor / exporter)
+Create better introduction screen
+Create better win screen
+Create better lose screen
+Create better instructions screen
