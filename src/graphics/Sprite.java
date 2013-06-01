@@ -3,21 +3,29 @@ package graphics;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class Sprite {
+public abstract class Sprite {
 
-	PApplet gameScreen;
+	static PApplet gameScreen;
+
+	public static PApplet getGameScreen() {
+		return gameScreen;
+	}
 	
-	PImage img;
+	public static void setGameScreen(PApplet gameScreen) {
+		Sprite.gameScreen = gameScreen;
+	}
 	
+	PImage currentImage;
 	private int collisionXOffset;
 	private int collisionYOffset;
+	
 	private int collisionWidth;
+
 	private int collisionHeight;
 	
-	public Sprite(PApplet gameScreen, PImage img) {
-
-		this.gameScreen = gameScreen;
-		this.img = img;
+	public Sprite(PImage img) {
+		
+		this.currentImage = img;
 
 		collisionXOffset = 0;
 		collisionYOffset = 0;
@@ -27,10 +35,9 @@ public class Sprite {
 
 	}
 
-	public Sprite(PApplet gameScreen, PImage img, int width, int height, int xOffset, int yOffset) {
-
-		this.gameScreen = gameScreen;
-		this.img = img;
+	public Sprite(PImage img, int width, int height, int xOffset, int yOffset) {
+		
+		this.currentImage = img;
 
 		collisionXOffset = xOffset;
 		collisionYOffset = yOffset;
@@ -40,38 +47,17 @@ public class Sprite {
 
 	}
 
-	public void draw(float x, float y) {
+	public abstract void draw(float x, float y);// {
 
-		gameScreen.image(img, x, y);
+		//gameScreen.image(img, x, y);
 		// stroke(40,240,48);
 		// fill(40,240,48);
 		// rect(x+collisionXOffset, y+collisionYOffset, collisionWidth,
 		// collisionHeight);
 
-	}
+	//}
 
-	public void draw(float x, float y, boolean flip) {
-
-		if (flip) {
-
-			gameScreen.pushMatrix();
-			gameScreen.translate(x + img.width, y);
-			//scale(-1.0, 1.0);
-			gameScreen.scale(-1, 1);
-			gameScreen.image(img, 0, 0);
-			gameScreen.popMatrix();
-			// scale(-1.0,1.0);
-
-		} else {
-			gameScreen.image(img, x, y);
-		}
-
-		/*
-		 * stroke(40,240,48); fill(40,240,48); rect(x+collisionXOffset,
-		 * y+collisionYOffset, collisionWidth, collisionHeight);
-		 */
-
-	}
+	public abstract void draw(float x, float y, boolean flip);
 
 	public int getCollisionHeight() {
 		return collisionHeight;
@@ -90,7 +76,7 @@ public class Sprite {
 	}
 
 	public PImage getImg() {
-		return img;
+		return currentImage;
 	}
 
 	public void setCollisionHeight(int collisionHeight) {
@@ -110,7 +96,7 @@ public class Sprite {
 	}
 
 	public void setImg(PImage img) {
-		this.img = img;
+		this.currentImage = img;
 	}
 
 }

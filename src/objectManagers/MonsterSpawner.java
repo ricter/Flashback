@@ -65,7 +65,7 @@ public class MonsterSpawner {
 		float spawnPointY = gameScreen.random(0, 400);
 
 		Physics.addGameEntity(new FlyingMonster(gameScreen, spawnPointX, spawnPointY,
-				Flashback.flyingSprite));
+				Flashback.eyeSprite));
 
 	}
 
@@ -78,10 +78,10 @@ public class MonsterSpawner {
 		float spawnPointY = gameScreen.random(0, 400);
 		spawnPointY = Physics.calculateNearestGroundBeneath(
 				Flashback.levelData.getGround(spawnPointX), spawnPointY,
-				Flashback.monsterSprite.getCollisionHeight());
+				Flashback.zombieSprite.getCollisionHeight());
 
 		Physics.addGameEntity(new GroundMonster(gameScreen, spawnPointX, spawnPointY,
-				Flashback.monsterSprite));
+				Flashback.zombieSprite));
 
 	}
 

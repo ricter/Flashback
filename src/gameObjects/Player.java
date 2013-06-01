@@ -122,8 +122,8 @@ public class Player extends GameObject{
 	
 	public void OnCollision(){
 	
-		Flashback.hit.rewind();
-		Flashback.hit.play();
+		//Flashback.hit.rewind();
+		//Flashback.hit.play();
 		fireRate -= 0.01;
 		fireRate = fireRate < 0 ? 0 : fireRate; 
 	

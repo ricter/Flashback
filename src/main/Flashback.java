@@ -1,8 +1,12 @@
 package main;
 
 import gameObjects.Player;
+import graphics.BulletSprite;
+import graphics.EyeSprite;
+import graphics.PlayerSprite;
 import graphics.Renderer;
 import graphics.Sprite;
+import graphics.ZombieSprite;
 import objectManagers.Camera;
 import objectManagers.LevelData;
 import objectManagers.MonsterSpawner;
@@ -37,14 +41,9 @@ public class Flashback extends PApplet {
 	static int backgroundColor = 255;
 	public static PImage backgroundImg;
 
-	public PImage playerImg;
-	public PImage monsterImg;
-	public PImage flyingImg;
-	public PImage bulletImg;
-
 	public static Sprite playerSprite;
-	public static Sprite monsterSprite;
-	public static Sprite flyingSprite;
+	public static ZombieSprite zombieSprite;
+	public static EyeSprite eyeSprite;
 	public static Sprite bulletSprite;
 
 	public Minim minim;
@@ -71,7 +70,7 @@ public class Flashback extends PApplet {
 	 */
 	public void setup() {
 
-		loadMusic();
+		//loadMusic();
 
 		size(1280, 720, P2D);
 		frameRate(baseFrameRate);
@@ -100,7 +99,7 @@ public class Flashback extends PApplet {
 
 		randomSeed(234234324);
 
-		music.play();
+		//music.play();
 
 	}
 
@@ -122,15 +121,18 @@ public class Flashback extends PApplet {
 	void loadImagesAndSprites() {
 
 		backgroundImg = loadImage("../images/bg_full_Background.png");
+		
+		Sprite.setGameScreen(this);
+		
+		PlayerSprite.loadImages();
+		ZombieSprite.loadImages();
+		EyeSprite.loadImages();
+		BulletSprite.loadImages();
 
-		playerImg = loadImage("../images/commando_jump_scale.png");
-		playerSprite = new Sprite(this, playerImg);
-		monsterImg = loadImage("../images/zombie_scale.png");
-		monsterSprite = new Sprite(this, monsterImg);
-		flyingImg = loadImage("../images/eye1-scale.png");
-		flyingSprite = new Sprite(this, flyingImg, 100, 100, 0, 50);
-		bulletImg = loadImage("../images/Bullet.png");
-		bulletSprite = new Sprite(this, bulletImg);
+		playerSprite = new PlayerSprite();
+		zombieSprite = new ZombieSprite();
+		eyeSprite = new EyeSprite(100, 100, 0, 50);
+		bulletSprite = new BulletSprite();
 
 	}
 
