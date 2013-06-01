@@ -5,22 +5,22 @@ import processing.core.PApplet;
 
 public class GameObject {
 
-	PApplet gameScreen;
+	protected PApplet gameScreen;
 	
-	public float xPos;
-	public float yPos;
+	private  float xPos;
+	protected  float yPos;
 
-	float radius;
+	protected float radius;
 
-	boolean flip;
-	boolean removeMe = false;
+	protected boolean flip;
+	protected boolean removeMe = false;
 
-	Sprite sprite;
+	protected Sprite sprite;
 
 	public GameObject(PApplet gameScreen) {
 
 		this.gameScreen = gameScreen;
-		xPos = 0;
+		setxPos(0);
 		yPos = 0;
 		this.sprite = null;
 
@@ -29,7 +29,7 @@ public class GameObject {
 	public GameObject(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		this.gameScreen = gameScreen;
-		xPos = x;
+		setxPos(x);
 		yPos = y;
 		this.sprite = sprite;
 
@@ -38,7 +38,7 @@ public class GameObject {
 	public void draw(int x, int y) {
 
 		if (sprite != null) {
-			sprite.draw(xPos + x, yPos + y, flip);
+			sprite.draw(getxPos() + x, yPos + y, flip);
 		}
 		// image(sprite.img, xPos+x, yPos+y);
 
@@ -58,10 +58,10 @@ public class GameObject {
 			float top1, top2;
 			float bottom1, bottom2;
 
-			left1 = xPos + sprite.getCollisionXOffset();
-			left2 = other.xPos + other.sprite.getCollisionXOffset();
-			right1 = xPos + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
-			right2 = other.xPos + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
+			left1 = getxPos() + sprite.getCollisionXOffset();
+			left2 = other.getxPos() + other.sprite.getCollisionXOffset();
+			right1 = getxPos() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
+			right2 = other.getxPos() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
 			top1 = yPos + sprite.getCollisionYOffset();
 			top2 = other.yPos + other.sprite.getCollisionYOffset();
 			bottom1 = yPos + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
@@ -91,7 +91,7 @@ public class GameObject {
 		} else {
 
 			// circle circle collision for now
-			float distX = other.xPos - other.xPos;
+			float distX = other.getxPos() - other.getxPos();
 			float distY = other.yPos - other.yPos;
 
 			return gameScreen.sqrt(distX * distX + distY * distY) <= radius + other.radius;
@@ -111,6 +111,14 @@ public class GameObject {
 
 		removeMe = true;
 
+	}
+
+	public float getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(float xPos) {
+		this.xPos = xPos;
 	}
 
 }

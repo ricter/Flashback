@@ -20,11 +20,5 @@ public class SplashScreen {
 		gameScreen.text("Loading...", 100, 100);
 
 	}
-	
-	/*public void draw(){
-		
-		drawSplashScreen();
-		
-	}*/
 
 }

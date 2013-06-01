@@ -8,12 +8,12 @@ import utils.Utils;
 
 public class LevelData {
 
-	PApplet gameScreen;
+	private PApplet gameScreen;
 	
-	public ArrayList<ArrayList<Float>> groundHeights;
-	public int xDistanceFromLeftWall = 0;
-	public int levelWidth = 800;
-	public float levelWidthPixels = (float) levelWidth * Utils.scaleXValue;
+	private ArrayList<ArrayList<Float>> groundHeights;
+	private int xDistanceFromLeftWall = 0;
+	private int levelWidth = 800;
+	private float levelWidthPixels = (float) getLevelWidth() * Utils.scaleXValue;
 
 	public LevelData (PApplet gameScreen){
 		this.gameScreen = 	gameScreen;
@@ -58,7 +58,7 @@ public class LevelData {
 			ground[0] = 0;
 			return ground;
 
-		} else if (xPos > Flashback.levelData.levelWidthPixels) {
+		} else if (xPos > Flashback.levelData.getLevelWidthPixels()) {
 
 			float[] ground = new float[1];
 			ground[0] = 0;
@@ -84,12 +84,12 @@ public class LevelData {
 	public  void createLevelOneGroundHeights() {
 
 		groundHeights = new ArrayList<ArrayList<Float>>(2);
-		groundHeights.add(new ArrayList<Float>(levelWidth));
-		groundHeights.add(new ArrayList<Float>(levelWidth));
+		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
+		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
 
 		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
 
-			for (int xPosition = 0; xPosition < levelWidth; xPosition++) {
+			for (int xPosition = 0; xPosition < getLevelWidth(); xPosition++) {
 
 				if (levelNumber == 0) {
 
@@ -175,6 +175,30 @@ public class LevelData {
 				}
 			}
 		}
+	}
+
+	public float getLevelWidthPixels() {
+		return levelWidthPixels;
+	}
+
+	public void setLevelWidthPixels(float levelWidthPixels) {
+		this.levelWidthPixels = levelWidthPixels;
+	}
+
+	public int getxDistanceFromLeftWall() {
+		return xDistanceFromLeftWall;
+	}
+
+	public void setxDistanceFromLeftWall(int xDistanceFromLeftWall) {
+		this.xDistanceFromLeftWall = xDistanceFromLeftWall;
+	}
+
+	public int getLevelWidth() {
+		return levelWidth;
+	}
+
+	public void setLevelWidth(int levelWidth) {
+		this.levelWidth = levelWidth;
 	}
 
 }

@@ -131,10 +131,10 @@ public class Physics {
 
 			return 0f;
 
-		} else if (xPosition > (Flashback.levelData.levelWidthPixels - objectWidth)) {
+		} else if (xPosition > (Flashback.levelData.getLevelWidthPixels() - objectWidth)) {
 
-			Flashback.winScreen.winScreenActive = true;
-			return Flashback.levelData.levelWidthPixels - objectHeight;
+			Flashback.winScreen.setWinScreenActive(true);
+			return Flashback.levelData.getLevelWidthPixels() - objectHeight;
 
 		} else
 			return xPosition;

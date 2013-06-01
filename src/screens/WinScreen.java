@@ -4,10 +4,10 @@ import processing.core.PApplet;
 
 public class WinScreen {
 
-	public boolean winScreenActive = false;
+	private static boolean winScreenActive = false;
 
-	int winScreenBackgroundColor = 125;
-	
+	private static final int winScreenBackgroundColor = 125;
+
 	PApplet gameScreen;
 
 	public WinScreen(PApplet gameScreen) {
@@ -15,13 +15,21 @@ public class WinScreen {
 		this.gameScreen = gameScreen;
 
 	}
-
+	
 	public void drawWinScreen() {
 
 		gameScreen.background(winScreenBackgroundColor);
-		gameScreen.text("You have won.Congratulations!", 100, 100);
+		gameScreen.text("You have won. Congratulations!", 100, 100);
 		gameScreen.text("Press spacebar to restart.", 100, 125);
 
+	}
+
+	public boolean isWinScreenActive() {
+		return winScreenActive;
+	}
+
+	public void setWinScreenActive(boolean winScreenActive) {
+		this.winScreenActive = winScreenActive;
 	}
 
 }

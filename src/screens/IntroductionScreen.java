@@ -6,7 +6,7 @@ public class IntroductionScreen {
 
 	private boolean introductionScreenActive = false;
 
-	int introductionScreenBackgroundColor = 60;
+	private static final int introductionScreenBackgroundColor = 60;
 
 	PApplet gameScreen;
 

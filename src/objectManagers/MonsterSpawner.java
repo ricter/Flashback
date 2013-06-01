@@ -8,23 +8,23 @@ import processing.core.PApplet;
 
 public class MonsterSpawner {
 
-	PApplet gameScreen;
+	private PApplet gameScreen;
 	
-	int maxAirEnemies = 10;
-	int curAirEnemies = 0;
+	private int maxAirEnemies = 10;
+	private int curAirEnemies = 0;
 
-	float maxAirSpawnRate = 4;
-	float minAirSpawnRate = 2;
-	float curAirSpawnRate;
-	float airSpawnTimer = 0;
+	private float maxAirSpawnRate = 4;
+	private float minAirSpawnRate = 2;
+	private float curAirSpawnRate;
+	private float airSpawnTimer = 0;
 
-	int maxGroundEnemies = 10;
-	int curGroundEnemies = 0;
+	private int maxGroundEnemies = 10;
+	private int curGroundEnemies = 0;
 
-	float maxGroundSpawnRate = 4;
-	float minGroundSpawnRate = 2;
-	float curGroundSpawnRate;
-	float groundSpawnTimer = 0;
+	private float maxGroundSpawnRate = 4;
+	private float minGroundSpawnRate = 2;
+	private float curGroundSpawnRate;
+	private float groundSpawnTimer = 0;
 
 	public MonsterSpawner(PApplet gameScreen) {
 
@@ -60,7 +60,7 @@ public class MonsterSpawner {
 
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
-		float spawnPointX = Flashback.levelData.xDistanceFromLeftWall
+		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
 				+ ((bias > 0) ? Flashback.xResolution + 80 : -80);
 		float spawnPointY = gameScreen.random(0, 400);
 
@@ -73,7 +73,7 @@ public class MonsterSpawner {
 
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
-		float spawnPointX = Flashback.levelData.xDistanceFromLeftWall
+		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
 				+ ((bias > 0) ? Flashback.xResolution + 80 : -80);
 		float spawnPointY = gameScreen.random(0, 400);
 		spawnPointY = Physics.calculateNearestGroundBeneath(

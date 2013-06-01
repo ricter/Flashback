@@ -61,11 +61,14 @@ public class Flashback extends PApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		PApplet.main(new String[] { "--present", "main.Flashback" });
+		
 	}
 
-	// Main setup method that is called on game load.
+	/**
+	 *  Main setup method that is called on game load.
+	 */
 	public void setup() {
 
 		loadMusic();
@@ -101,6 +104,9 @@ public class Flashback extends PApplet {
 
 	}
 
+	/**
+	 * 
+	 */
 	void createScreens() {
 
 		introductionScreen = new IntroductionScreen(this, true);
@@ -110,6 +116,9 @@ public class Flashback extends PApplet {
 
 	}
 
+	/**
+	 * 
+	 */
 	void loadImagesAndSprites() {
 
 		backgroundImg = loadImage("../images/bg_full_Background.png");
@@ -125,6 +134,9 @@ public class Flashback extends PApplet {
 
 	}
 
+	/**
+	 * 
+	 */
 	void loadMusic() {
 
 		minim = new Minim(this);
@@ -136,14 +148,16 @@ public class Flashback extends PApplet {
 
 	}
 
-	// Automatically called as frequently as possible.
+	/**
+	 *  Automatically called as frequently as possible.
+	 */
 	public void draw() {
 
 		if (introductionScreen.isIntroductionScreenActive()) {
 			introductionScreen.drawIntroductionScreen();
-		} else if (winScreen.winScreenActive) {
+		} else if (winScreen.isWinScreenActive()) {
 			winScreen.drawWinScreen();
-		} else if (loseScreen.loseScreenActive) {
+		} else if (loseScreen.isLoseScreenActive()) {
 			loseScreen.drawLoseScreen();
 		} else if (instructionScreen.isInstructionScreenActive()) {
 			instructionScreen.drawInstructionScreen();
@@ -159,19 +173,26 @@ public class Flashback extends PApplet {
 		}
 	}
 
-	// Handles all keyboard presses
+	public void mousePressed() {
+		
+		if (introductionScreen.isIntroductionScreenActive()
+				|| winScreen.isWinScreenActive() || loseScreen.isLoseScreenActive() ) { // Prevent the player from firing while screens are active
+
+		} else { // try to fire
+			
+			player.tryToFire();
+			
+		}
+		
+	}
+	
+	/**
+	 *  Handles all keyboard presses
+	 */
 	public void keyPressed() {
 
 		if (introductionScreen.isIntroductionScreenActive()
-				|| winScreen.winScreenActive || loseScreen.loseScreenActive) { // Prevent
-																				// the
-																				// player
-																				// from
-																				// moving
-																				// while
-																				// screens
-																				// are
-																				// active
+				|| winScreen.isWinScreenActive() || loseScreen.isLoseScreenActive() ) { // Prevent the player from moving while screens are active
 
 		} else {
 
@@ -203,43 +224,38 @@ public class Flashback extends PApplet {
 		}
 	}
 
-	// Handles all keyboard releases
+	/**
+	 *  Handles all keyboard releases
+	 */
 	public void keyReleased() {
 
-		if (introductionScreen.isIntroductionScreenActive()) // If the
-																// introduction
-																// screen is up,
-																// allow the
-																// player to
-																// press any key
-																// to begin
-		{
+		if (introductionScreen.isIntroductionScreenActive()){ // If the introduction screen is up, allow the player to press any key to begin
+		
 			introductionScreen.setIntroductionScreenActive(false);
+			
 		}
-		if (winScreen.winScreenActive) // if the win screen is up, allow the
-										// player to press spacebar to restart
-										// the game
-		{
+		if (winScreen.isWinScreenActive()) { // if the win screen is up, allow the player to press spacebar to restart the game
+		
 			if (key == ' ') {
 
 				clearGameObjectArrays();
 				addPlayerToStart();
-				winScreen.winScreenActive = false;
+				winScreen.setWinScreenActive(false);
 
 			}
-		} else if (loseScreen.loseScreenActive) { // if the lose screen is up,
-													// allow the player to press
-													// spacebar to restart the
-													// game
+			
+		} else if (loseScreen.isLoseScreenActive()) { // if the lose screen is up, allow the player to press spacebar to restart the game
+			
 			if (key == ' ') {
 
 				clearGameObjectArrays();
 				addPlayerToStart();
-				loseScreen.loseScreenActive = false;
+				loseScreen.setLoseScreenActive(false);
 
 			}
-		} else // no screen active, player is actually playing the game
-		{
+			
+		} else { // no screen active, player is actually playing the game
+		
 			switch (key) {
 
 			case ('w'):
@@ -268,7 +284,9 @@ public class Flashback extends PApplet {
 		}
 	}
 
-	// Clears all of the game object arrays (player, npcs, bullets)
+	/**
+	 *  Clears all of the game object arrays (player, npcs, bullets)
+	 */
 	public void clearGameObjectArrays() {
 
 		Physics.getPlayerEntities().clear();
@@ -278,8 +296,9 @@ public class Flashback extends PApplet {
 
 	}
 
-	// Adds the player to the start of the map and adds them to the physics
-	// handler
+	/**
+	 *  Adds the player to the start of the map and adds them to the physics handler
+	 */
 	public void addPlayerToStart() {
 
 		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite);
@@ -287,7 +306,9 @@ public class Flashback extends PApplet {
 
 	}
 
-	// Used to stop the music
+	/**
+	 *  Used to stop the music
+	 */
 	public void stop() {
 
 		lub.close();

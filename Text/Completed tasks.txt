@@ -103,3 +103,8 @@ Music - Jeff
 Converted to Eclipse - Scott
 General refactoring - Scott
 ---------------
+
+5/31/13
+---------------
+Make player fire manually- Scott
+---------------

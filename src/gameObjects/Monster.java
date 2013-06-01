@@ -6,14 +6,14 @@ import processing.core.PApplet;
 
 public class Monster extends GameObject {
 
-	boolean goLeft = false;
-	boolean goRight = false;
-	boolean goUp = false;
-	boolean goDown = false;
+	private boolean goLeft = false;
+	private boolean goRight = false;
+	private boolean goUp = false;
+	private boolean goDown = false;
 
-	double yVelocity = 0.0;
+	protected double yVelocity = 0.0;
 
-	float maxSpeed = 70;
+	private float maxSpeed = 70;
 
 	public Monster(PApplet gameScreen, float x, float y, Sprite sprite) {
 
@@ -25,9 +25,9 @@ public class Monster extends GameObject {
 	public void update(float deltaT) {
 
 		yVelocity = Physics.applyGravity(yVelocity, deltaT);
-		yPos = Physics.stopAtGround(xPos, yPos, -(float) yVelocity * deltaT,
+		yPos = Physics.stopAtGround(getxPos(), yPos, -(float) yVelocity * deltaT,
 				sprite.getCollisionHeight());
-		if (Physics.isAtGround(xPos, yPos, sprite.getCollisionHeight()))
+		if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight()))
 			yVelocity = 0;
 
 	}

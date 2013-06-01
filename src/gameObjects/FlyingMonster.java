@@ -7,19 +7,19 @@ import processing.core.PApplet;
 
 public class FlyingMonster extends GameObject {
 
-	float targetX;
-	float targetY;
+	private float targetX;
+	private float targetY;
 
-	float fireTimer;
-	float minFireRate = 1; // 1.5
-	float maxFireRate = 4;
+	private float fireTimer;
+	private float minFireRate = 1; // 1.5
+	private float maxFireRate = 4;
 
-	float maxSpeed = 120;
+	private float maxSpeed = 120;
 
 	public FlyingMonster(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		super(gameScreen, x, y, sprite);
-		targetX = xPos;
+		targetX = getxPos();
 		targetY = yPos;
 
 		fireTimer = 0;
@@ -29,27 +29,27 @@ public class FlyingMonster extends GameObject {
 
 	public void update(float deltaT) {
 
-		if (targetX - 2 <= xPos && targetX + 2 >= xPos) {
+		if (targetX - 2 <= getxPos() && targetX + 2 >= getxPos()) {
 
-			targetX = Physics.getPlayerEntities().get(0).xPos
+			targetX = Physics.getPlayerEntities().get(0).getxPos()
 					+ gameScreen.random(-300, 300);
 			targetY = Physics.getPlayerEntities().get(0).yPos + 290;
 
 		} // end if
 
-		xPos += ((maxSpeed * deltaT) * (xPos < targetX ? 1 : -1));
+		setxPos(getxPos() + ((maxSpeed * deltaT) * (getxPos() < targetX ? 1 : -1)));
 
-		flip = xPos < targetX ? true : false;
+		flip = getxPos() < targetX ? true : false;
 
 		if (fireTimer < 0) {
 
 			fireTimer = gameScreen.random(minFireRate, maxFireRate);
 
 			Physics.addEnemyBullet(new Bullet( gameScreen,
-					(float) (xPos + sprite.getImg().width * 0.5),
+					(float) (getxPos() + sprite.getImg().width * 0.5),
 					(float) (yPos + sprite.getImg().height * 0.5),
 					Flashback.bulletSprite, (float) (Physics.getPlayerEntities()
-							.get(0).xPos
+							.get(0).getxPos()
 							+ Physics.getPlayerEntities().get(0).sprite
 									.getImg().width * 0.5), 
 									(float) (Physics

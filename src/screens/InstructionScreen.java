@@ -6,9 +6,9 @@ public class InstructionScreen {
 
 	private boolean instructionScreenActive = false;
 
-	int instructionScreenBackgroundColor = 125;
+	private static final int instructionScreenBackgroundColor = 125;
 	
-	PApplet gameScreen;
+	private PApplet gameScreen;
 
 	public InstructionScreen(PApplet gameScreen) {
 		this.gameScreen = gameScreen;

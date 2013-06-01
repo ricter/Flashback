@@ -1,6 +1,5 @@
-New heartbeat mechanic
+New heart beat mechanic
 Make splash screen work better
-Make player fire manually
 Animate player
 Animate monsters
 Draw platforms

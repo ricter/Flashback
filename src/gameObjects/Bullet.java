@@ -6,10 +6,10 @@ import processing.core.PVector;
 
 public class Bullet extends GameObject {
 
-	float vel = 10;
-	PVector vec;
-	float distanceTraveled = 0;
-	float maxDistance = 2000;
+	private float vel = 10;
+	private PVector vec;
+	private float distanceTraveled = 0;
+	private float maxDistance = 2000;
 
 	// Test to remove
 	Bullet(PApplet gameScreen, float x, float y, Sprite img, float targetX, float targetY) {
@@ -39,7 +39,7 @@ public class Bullet extends GameObject {
 	// updates all variables of the bullet when needed
 	public void update(float deltaT) {
 
-		xPos = xPos + vec.x * vel;
+		setxPos(getxPos() + vec.x * vel);
 		yPos = yPos + vec.y * vel;
 		distanceTraveled += gameScreen.abs(vec.x * vel) + gameScreen.abs(vec.y * vel);
 
@@ -50,7 +50,7 @@ public class Bullet extends GameObject {
 		gameScreen.strokeWeight(1);
 		gameScreen.stroke(240, 7, 42);
 		gameScreen.fill(240, 7, 42);
-		gameScreen.ellipse(x + xPos, y + yPos, 5, 5);
+		gameScreen.ellipse(x + getxPos(), y + yPos, 5, 5);
 
 	}
 
