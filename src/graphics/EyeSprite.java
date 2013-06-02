@@ -62,7 +62,6 @@ public class EyeSprite extends Sprite {
 		if (imageNumber == eyeImages.size()){
 			imageNumber = 0;
 		}
-		System.out.println(imageNumber);
 		currentImage = eyeImages.get(imageNumber);
 		
 	}

@@ -46,16 +46,16 @@ public class FlyingMonster extends GameObject {
 			fireTimer = gameScreen.random(minFireRate, maxFireRate);
 
 			Physics.addEnemyBullet(new Bullet( gameScreen,
-					(float) (getxPos() + sprite.getImg().width * 0.5),
-					(float) (yPos + sprite.getImg().height * 0.5),
+					(float) (getxPos() + sprite.getCurrentImage().width * 0.5),
+					(float) (yPos + sprite.getCurrentImage().height * 0.5),
 					Flashback.bulletSprite, (float) (Physics.getPlayerEntities()
 							.get(0).getxPos()
 							+ Physics.getPlayerEntities().get(0).sprite
-									.getImg().width * 0.5), 
+									.getCurrentImage().width * 0.5), 
 									(float) (Physics
 							.getPlayerEntities().get(0).yPos
 							+ Physics.getPlayerEntities().get(0).sprite
-									.getImg().height * 0.5)));
+									.getCurrentImage().height * 0.5)));
 
 		} // end if
 		fireTimer -= deltaT;

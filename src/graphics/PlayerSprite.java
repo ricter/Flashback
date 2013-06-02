@@ -17,14 +17,6 @@ public class PlayerSprite extends Sprite{
 	private static PImage runImage5;
 	private static PImage runImage6;
 	
-	public PlayerSprite() {
-		super(idleImage);
-	}
-
-	public PlayerSprite(int width, int height, int xOffset, int yOffset) {
-		super(idleImage, width, height, xOffset, yOffset);
-	}
-	
 	public static void loadImages(){
 		
 		idleImage = gameScreen.loadImage("../images/commando_idle.png");
@@ -39,16 +31,47 @@ public class PlayerSprite extends Sprite{
 		runImages.add(gameScreen.loadImage("../images/commando_run6.png"));
 		
 	}
+	
+	private int imageNumber = 0;
 
+	private boolean isJumping = false;
+
+	private boolean isRunning = false;
+
+	public PlayerSprite() {
+		super(idleImage);
+	}
+
+	public PlayerSprite(int width, int height, int xOffset, int yOffset) {
+		super(idleImage, width, height, xOffset, yOffset);
+	}
 	@Override
 	public void draw(float x, float y) {
 
 		gameScreen.image(currentImage, x, y);
 		
 	}
-
+	
 	@Override
 	public void draw(float x, float y, boolean flip) {
+		
+		if (isJumping){
+			
+			this.setCurrentImage(jumpImage);
+			
+		} else if (isRunning){
+			
+			imageNumber++;
+			if (imageNumber == runImages.size()){
+				imageNumber = 0;
+			}
+			this.setCurrentImage(runImages.get(imageNumber));
+			
+		} else { // is idle
+			
+			this.setCurrentImage(idleImage);
+			
+		}
 		
 		if (flip) {
 
@@ -64,6 +87,22 @@ public class PlayerSprite extends Sprite{
 			gameScreen.image(currentImage, x, y);
 		}
 		
+	}
+
+	public boolean isJumping() {
+		return isJumping;
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setJumping(boolean isJumping) {
+		this.isJumping = isJumping;
+	}
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 
 }

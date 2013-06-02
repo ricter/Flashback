@@ -41,10 +41,10 @@ public class Flashback extends PApplet {
 	static int backgroundColor = 255;
 	public static PImage backgroundImg;
 
-	public static Sprite playerSprite;
+	public static PlayerSprite playerSprite;
 	public static ZombieSprite zombieSprite;
 	public static EyeSprite eyeSprite;
-	public static Sprite bulletSprite;
+	public static BulletSprite bulletSprite;
 
 	public Minim minim;
 	public AudioPlayer lub;
@@ -203,10 +203,12 @@ public class Flashback extends PApplet {
 			case ('w'):
 			case ('W'):
 				player.setGoUp(true);
+				playerSprite.setJumping(true);
 				break;
 			case ('a'):
 			case ('A'):
 				player.setGoLeft(true);
+				playerSprite.setRunning(true);
 				break;
 			case ('s'):
 			case ('S'):
@@ -215,6 +217,8 @@ public class Flashback extends PApplet {
 			case ('d'):
 			case ('D'):
 				player.setGoRight(true);
+				playerSprite.setJumping(true);
+				playerSprite.setRunning(true);
 				break;
 
 			case ('i'):

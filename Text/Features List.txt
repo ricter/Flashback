@@ -1,7 +1,5 @@
 New heart beat mechanic
 Make splash screen work better
-Animate player
-Animate monsters
 Draw platforms
 Refactor physics
 Create platforms better

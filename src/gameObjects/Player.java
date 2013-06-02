@@ -1,5 +1,6 @@
 package gameObjects;
 
+import graphics.PlayerSprite;
 import graphics.Sprite;
 import main.Flashback;
 import physics.Physics;
@@ -51,6 +52,10 @@ public class Player extends GameObject{
 			setxPos(Physics.stopAtWall(getxPos() + 10, sprite.getCollisionWidth(),
 					sprite.getCollisionHeight()));
 
+		} else {
+			
+			((PlayerSprite) this.sprite).setRunning(false);
+			
 		}
 
 		if (isGoUp()) {
@@ -71,9 +76,10 @@ public class Player extends GameObject{
 		yPos = Physics.stopAtGround(getxPos(), yPos, -(float) yVelocity * deltaT,
 				sprite.getCollisionHeight());
 		if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight())){
-			
-		}
 			yVelocity = 0;
+			((PlayerSprite) this.sprite).setJumping(false);
+		}
+			
 		/*
 		 * heartbeatTimer -= bps*deltaT; if(heartbeatTimer < 0) { heartbeatTimer
 		 * = 2.0; if(dub != null) { lub.rewind(); lub.play(); } } else if(
@@ -88,8 +94,8 @@ public class Player extends GameObject{
 		if (gameScreen.millis() - lastFired > fireRate) { // fire bullet
 
 			lastFired = gameScreen.millis();
-			Physics.addPlayerBullet( new Bullet(gameScreen, (float)(getxPos() + sprite.getImg().width* 0.5), 
-					(float) (yPos + sprite.getImg().height * 0.5),
+			Physics.addPlayerBullet( new Bullet(gameScreen, (float)(getxPos() + sprite.getCurrentImage().width* 0.5), 
+					(float) (yPos + sprite.getCurrentImage().height * 0.5),
 					Flashback.bulletSprite, gameScreen.mouseX + Flashback.levelData.getxDistanceFromLeftWall(),
 					gameScreen.mouseY,
 					bps));

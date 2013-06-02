@@ -47,15 +47,7 @@ public abstract class Sprite {
 
 	}
 
-	public abstract void draw(float x, float y);// {
-
-		//gameScreen.image(img, x, y);
-		// stroke(40,240,48);
-		// fill(40,240,48);
-		// rect(x+collisionXOffset, y+collisionYOffset, collisionWidth,
-		// collisionHeight);
-
-	//}
+	public abstract void draw(float x, float y);
 
 	public abstract void draw(float x, float y, boolean flip);
 
@@ -75,7 +67,7 @@ public abstract class Sprite {
 		return collisionYOffset;
 	}
 
-	public PImage getImg() {
+	public PImage getCurrentImage() {
 		return currentImage;
 	}
 
@@ -95,7 +87,7 @@ public abstract class Sprite {
 		this.collisionYOffset = collisionYOffset;
 	}
 
-	public void setImg(PImage img) {
+	public void setCurrentImage(PImage img) {
 		this.currentImage = img;
 	}
 
