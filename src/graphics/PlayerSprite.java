@@ -10,12 +10,6 @@ public class PlayerSprite extends Sprite{
 	
 	private static PImage idleImage;
 	private static PImage jumpImage;
-	private static PImage runImage1;
-	private static PImage runImage2;
-	private static PImage runImage3;
-	private static PImage runImage4;
-	private static PImage runImage5;
-	private static PImage runImage6;
 	
 	public static void loadImages(){
 		
