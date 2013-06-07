@@ -33,7 +33,7 @@ public class PlayerSprite extends Sprite{
 	}
 	
 	private int imageNumber = 0;
-	private static int fpscount = 0;
+	private static int fpsCount = 0;
 	private static int animationSpeed = 5;
 	
 	private boolean isJumping = false;
@@ -63,8 +63,8 @@ public class PlayerSprite extends Sprite{
 			
 		} else if (isRunning){
 			
-			if(fpscount++ > animationSpeed) {
-				fpscount = 0;
+			if(fpsCount++ > animationSpeed) {
+				fpsCount = 0;
 				imageNumber++;
 				if (imageNumber == runImages.size()){
 					imageNumber = 0;

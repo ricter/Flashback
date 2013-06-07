@@ -8,6 +8,8 @@ public class EyeSprite extends Sprite {
 
 	private static ArrayList<PImage> eyeImages;
 	private int imageNumber = 0;
+	private int fpsCount = 0;
+	private int animationSpeed = 5;
 	
 	public EyeSprite() {
 		super(eyeImages.get(0));
@@ -32,12 +34,15 @@ public class EyeSprite extends Sprite {
 
 		gameScreen.image(currentImage, x, y);
 		
-		imageNumber++;
-		if (imageNumber == eyeImages.size()){
-			imageNumber = 0;
+		if(fpsCount++ > animationSpeed) {
+			fpsCount = 0;
+			imageNumber++;
+			if (imageNumber == eyeImages.size()){
+				imageNumber = 0;
+			}
+			System.out.println(imageNumber);
+			currentImage = eyeImages.get(imageNumber);
 		}
-		System.out.println(imageNumber);
-		currentImage = eyeImages.get(imageNumber);
 		
 	}
 
