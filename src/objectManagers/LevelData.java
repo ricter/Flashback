@@ -1,14 +1,35 @@
 package objectManagers;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.FileReader;
+import java.util.Iterator;
 
 import main.Flashback;
 import processing.core.PApplet;
 import utils.Utils;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class LevelData {
 
 	private PApplet gameScreen;
+	private JSONParser parser = new JSONParser();
+	
+	private JSONObject level;
+	private JSONArray levelLayers, levelTilesets;
+	
+	private Integer levelHeight;
+	private Integer levelWidth2;
+	private Integer levelTileHeight;
+	private Integer levelTileWidth;
+	private ArrayList<HashMap<String, Object>> levelTileDefs = new ArrayList<HashMap<String, Object>>();
 	
 	private ArrayList<ArrayList<Float>> groundHeights;
 	private int xDistanceFromLeftWall = 0;
@@ -16,6 +37,7 @@ public class LevelData {
 	private float levelWidthPixels = (float) getLevelWidth() * Utils.scaleXValue;
 
 	public LevelData (PApplet gameScreen){
+		loadLevel();
 		this.gameScreen = 	gameScreen;
 	}
 	
@@ -79,6 +101,51 @@ public class LevelData {
 		return ground;
 
 	} // end getGround
+	
+	private void loadLevel() {
+		try {
+			Object raw = parser.parse(new FileReader("../levels/level.json"));
+			level = (JSONObject)raw; 
+			
+			levelHeight = (Integer)level.get("height");
+			levelWidth2 = (Integer)level.get("width");
+			levelTileHeight = (Integer)level.get("tileheight");
+			levelTileWidth = (Integer)level.get("tilewidth");
+			
+			levelLayers = (JSONArray)level.get("layers");
+			levelTilesets = (JSONArray)level.get("tilesets");
+			
+			for(int i = 0; i < levelTilesets.size(); i++) {
+				JSONObject tile = (JSONObject)levelTilesets.get(i - 1);
+				HashMap<String, Object> tileDef = new HashMap<String, Object>();
+				tileDef.put("gid", Integer.valueOf(tile.get("firstgid").toString()));
+				tileDef.put("image", tile.get("image").toString());
+				tileDef.put("props", tile.get("properties"));
+				
+				levelTileDefs.add(tileDef);
+			}
+			
+			// Iterate through layers
+			for(int i = 0; i < levelLayers.size(); i++) {
+				JSONObject levelLayer = (JSONObject)levelLayers.get(i - 1);
+				
+				if(levelLayer.get("name") == "collision") {
+					// Iterate through level data and draw collision boxes
+					// at every non-0 area
+				}
+				else if(levelLayer.get("visible") == "true") {
+					// Iterate through level data and draw images at
+					// every non-0 area using the tile definitions
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 
 	// Creates the platforms, find a better way to do this
 	public  void createLevelOneGroundHeights() {

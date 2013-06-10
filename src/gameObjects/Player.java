@@ -5,6 +5,8 @@ import graphics.Sprite;
 import main.Flashback;
 import physics.Physics;
 import processing.core.PApplet;
+import java.util.HashMap;
+
 
 public class Player extends GameObject{
 
@@ -17,7 +19,7 @@ public class Player extends GameObject{
 	double heartbeatTimer = 2; //2.0
 	double fireRate = 0.7f;
 	double lastFired = 0.0;
-
+	
 	double yVelocity = 0.0;
 	double xSpeed = 5.0;
 
@@ -25,7 +27,7 @@ public class Player extends GameObject{
 
 		super(gameScreen, x, y, sprite);
 		radius = 20;
-		heartbeatTimer = bps;
+		heartbeatTimer = bps;	
 
 	}
 
