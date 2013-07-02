@@ -21,14 +21,14 @@ public class Bullet extends GameObject {
 	}
 
 	// Default constructor
-	Bullet(PApplet gameScreen, float x, float y, Sprite img, float targetX, float targetY, float heartBeat) {
+	Bullet(PApplet gameScreen, float x, float y, Sprite img, float targetX, float targetY, double heartBeat) {
 
 		super(gameScreen, x, y, img);
 		vec = new PVector(targetX - x, targetY - y);
 		vec.normalize();
 
 		float theta = (gameScreen.random(-1, 1) + gameScreen.random(-1, 1) + gameScreen.random(-1, 1)) / 3
-				* heartBeat * 10;
+				* (float)heartBeat * 10;
 
 		gameScreen.constrain(theta, -100, 100);
 

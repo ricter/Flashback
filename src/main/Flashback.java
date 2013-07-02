@@ -3,10 +3,15 @@ package main;
 import gameObjects.Player;
 import graphics.BulletSprite;
 import graphics.EyeSprite;
+import graphics.PlayerArmSprite;
 import graphics.PlayerSprite;
 import graphics.Renderer;
 import graphics.Sprite;
 import graphics.ZombieSprite;
+
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
 import objectManagers.Camera;
 import objectManagers.LevelData;
 import objectManagers.MonsterSpawner;
@@ -42,6 +47,7 @@ public class Flashback extends PApplet {
 	public static PImage backgroundImg;
 
 	public static PlayerSprite playerSprite;
+	public static PlayerArmSprite playerArmSprite;
 	public static ZombieSprite zombieSprite;
 	public static EyeSprite eyeSprite;
 	public static BulletSprite bulletSprite;
@@ -70,7 +76,7 @@ public class Flashback extends PApplet {
 	 */
 	public void setup() {
 
-		//loadMusic();
+		loadMusic();
 
 		size(1280, 720, P2D);
 		frameRate(baseFrameRate);
@@ -84,10 +90,17 @@ public class Flashback extends PApplet {
 
 		createScreens();
 
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent mwe) {
+				mouseWheel(mwe.getWheelRotation());
+			}
+		}); 
+		
 		monsterSpawner = new MonsterSpawner(this);
 
-		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite);
-		Physics.addPlayerEntity(player);
+		addPlayerToStart();
+		//player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
+		//Physics.addPlayerEntity(player);
 
 		levelData = new LevelData(this);
 		levelData.createLevelOneGroundHeights();
@@ -99,7 +112,7 @@ public class Flashback extends PApplet {
 
 		randomSeed(234234324);
 
-		//music.play();
+		music.play();
 
 	}
 
@@ -125,11 +138,13 @@ public class Flashback extends PApplet {
 		Sprite.setGameScreen(this);
 		
 		PlayerSprite.loadImages();
+		PlayerArmSprite.loadImages();
 		ZombieSprite.loadImages();
 		EyeSprite.loadImages();
 		BulletSprite.loadImages();
 
 		playerSprite = new PlayerSprite();
+		playerArmSprite = new PlayerArmSprite();
 		zombieSprite = new ZombieSprite();
 		eyeSprite = new EyeSprite(100, 100, 0, 50);
 		bulletSprite = new BulletSprite();
@@ -165,8 +180,6 @@ public class Flashback extends PApplet {
 			instructionScreen.drawInstructionScreen();
 		} else {
 
-			// background(backgroundColor);
-
 			monsterSpawner.update(1 / (float) baseFrameRate);
 
 			Physics.updateGameObjects(1 / (float) baseFrameRate);
@@ -185,6 +198,13 @@ public class Flashback extends PApplet {
 			player.tryToFire();
 			
 		}
+		
+	}
+	
+	public void mouseWheel(int delta) {
+		
+		//println("mouse has moved by " + delta + " units."); 
+		player.setFireRateAdjustment(player.getFireRateAdjustment() + (delta * -1) / 2);
 		
 	}
 	
@@ -307,7 +327,7 @@ public class Flashback extends PApplet {
 	 */
 	public void addPlayerToStart() {
 
-		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite);
+		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
 		Physics.addPlayerEntity(player);
 
 	}
