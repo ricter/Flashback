@@ -40,63 +40,50 @@ public class GameObject {
 		if (sprite != null) {
 			sprite.draw(getXPosition() + x, yPosition + y, flip);
 		}
-		// image(sprite.img, xPos+x, yPos+y);
 
 	}
 
 	// Should never be called, should be overloaded by any children
 	public void update(float deltaT) {
-
+	    
 	}
 
 	public boolean collide(GameObject other) {
 
-		if (sprite != null && other.sprite != null) {
+	    float left1, left2;
+        float right1, right2;
+        float top1, top2;
+        float bottom1, bottom2;
 
-			float left1, left2;
-			float right1, right2;
-			float top1, top2;
-			float bottom1, bottom2;
+        left1 = getXPosition() + sprite.getCollisionXOffset();
+        left2 = other.getXPosition() + other.sprite.getCollisionXOffset();
+        right1 = getXPosition() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
+        right2 = other.getXPosition() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
+        top1 = yPosition + sprite.getCollisionYOffset();
+        top2 = other.yPosition + other.sprite.getCollisionYOffset();
+        bottom1 = yPosition + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
+        bottom2 = other.yPosition + other.sprite.getCollisionYOffset() + other.sprite.getCollisionWidth();
 
-			left1 = getXPosition() + sprite.getCollisionXOffset();
-			left2 = other.getXPosition() + other.sprite.getCollisionXOffset();
-			right1 = getXPosition() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
-			right2 = other.getXPosition() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
-			top1 = yPosition + sprite.getCollisionYOffset();
-			top2 = other.yPosition + other.sprite.getCollisionYOffset();
-			bottom1 = yPosition + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
-			bottom2 = other.yPosition + other.sprite.getCollisionYOffset() + other.sprite.getCollisionWidth();
+        if (flip) {
+            left1 += sprite.getCollisionWidth();
+            right1 += sprite.getCollisionWidth();
+        }
+        /*
+         * if(other.flip) { right2 -= other.sprite.collisionWidth; left2 -=
+         * other.sprite.collisionWidth; }
+         */
 
-			if (flip) {
-				left1 += sprite.getCollisionWidth();
-				right1 += sprite.getCollisionWidth();
-			}
-			/*
-			 * if(other.flip) { right2 -= other.sprite.collisionWidth; left2 -=
-			 * other.sprite.collisionWidth; }
-			 */
+        if (bottom1 < top2)
+            return false;
+        if (top1 > bottom2)
+            return false;
 
-			if (bottom1 < top2)
-				return false;
-			if (top1 > bottom2)
-				return false;
+        if (right1 < left2)
+            return false;
+        if (left1 > right2)
+            return false;
 
-			if (right1 < left2)
-				return false;
-			if (left1 > right2)
-				return false;
-
-			return true;
-
-		} else {
-
-			// circle circle collision for now
-			float distX = other.getXPosition() - other.getXPosition();
-			float distY = other.yPosition - other.yPosition;
-
-			return gameScreen.sqrt(distX * distX + distY * distY) <= radius + other.radius;
-
-		}
+        return true;
 
 	}
 

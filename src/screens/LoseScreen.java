@@ -1,5 +1,6 @@
 package screens;
 
+import main.Flashback;
 import processing.core.PApplet;
 
 public class LoseScreen {
@@ -20,7 +21,8 @@ public class LoseScreen {
 
 		gameScreen.background(loseScreenBackgroundColor);
 		gameScreen.text("You have lost.Sorry!", 100, 100);
-		gameScreen.text("Press spacebar to restart.", 100, 125);
+		gameScreen.text("Score: " + Flashback.getPlayer().getScorecard().getScore(), 100, 125);
+		gameScreen.text("Press spacebar to restart.", 100, 150);
 
 	}
 

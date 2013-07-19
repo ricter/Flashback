@@ -109,9 +109,12 @@ public class Flashback extends PApplet {
 		} else {
 
 			monsterSpawner.update(1 / (float) baseFrameRate);
-
 			Physics.updateGameObjects(1 / (float) baseFrameRate);
+
 			renderer.drawGameObjects();
+			
+            fill(255, 255, 255);
+			text("i: instructions", xResolution - 250, 40);
 
 		}
 	}
@@ -130,37 +133,102 @@ public class Flashback extends PApplet {
 		if (introductionScreen.isIntroductionScreenActive()
 				|| winScreen.isWinScreenActive() || loseScreen.isLoseScreenActive() ) { // Prevent the player from moving while screens are active
 
-		} else {
+		    // do nothing
+		    
+		} if (instructionScreen.isInstructionScreenActive()) {
+		    
+		    if (key == CODED){
+                
+                if (keyCode == LEFT) {
+                    
+                    instructionScreen.changeScreenNumber(false);
+                    
+                } else if (keyCode == RIGHT) {
+                    
+                    instructionScreen.changeScreenNumber(true);
+                    
+                }
+                
+            } else {
+                
+                switch (key) {
 
-			switch (key) {
+                case ('a'):
+                case ('A'):
+                    instructionScreen.changeScreenNumber(false);
+                    break;
+                case ('d'):
+                case ('D'):
+                    instructionScreen.changeScreenNumber(true);
+                    break;
+                case (ESC):
+                    instructionScreen.setInstructionScreenActive(false);
+                    key = 0; 
+                    break;
+                }
+            
+                
+            }
+		    
+		} else { // player is playing the game
 
-			case ('w'):
-			case ('W'):
-				player.setGoUp(true);
-				playerSprite.setJumping(true);
-				break;
-			case ('a'):
-			case ('A'):
-				player.setGoLeft(true);
-				playerSprite.setRunning(true);
-				break;
-			case ('s'):
-			case ('S'):
-				player.setGoDown(true);
-				break;
-			case ('d'):
-			case ('D'):
-				player.setGoRight(true);
-				playerSprite.setJumping(true);
-				playerSprite.setRunning(true);
-				break;
+		    if (key == CODED){
+                
+                if (keyCode == UP) {
+                    
+                    player.setGoUp(true);
+                    playerSprite.setJumping(true);
+                    
+                } else if (keyCode == LEFT) {
+                    
+                    player.setGoLeft(true);
+                    playerSprite.setRunning(true);
+                    
+                } else if (keyCode == DOWN) {
+                    
+                    player.setGoDown(true);
+                    
+                } else if (keyCode == RIGHT) {
+                    
+                    player.setGoRight(true);
+                    playerSprite.setJumping(true);
+                    playerSprite.setRunning(true);
+                    
+                }
+                
+            } else {
+                
+                switch (key) {
 
-			case ('i'):
-			case ('I'):
-				instructionScreen.setInstructionScreenActive(true);
-				break;
+                case ('w'):
+                case ('W'):
+                    player.setGoUp(true);
+                    playerSprite.setJumping(true);
+                    break;
+                case ('a'):
+                case ('A'):
+                    player.setGoLeft(true);
+                    playerSprite.setRunning(true);
+                    break;
+                case ('s'):
+                case ('S'):
+                    player.setGoDown(true);
+                    break;
+                case ('d'):
+                case ('D'):
+                    player.setGoRight(true);
+                    playerSprite.setRunning(true);
+                    break;
 
-			}
+                case ('i'):
+                case ('I'):
+                    instructionScreen.setInstructionScreenActive(true);
+                    break;
+
+                }
+                
+            }
+			
 		}
 	}
 
@@ -174,6 +242,7 @@ public class Flashback extends PApplet {
 			introductionScreen.setIntroductionScreenActive(false);
 			
 		}
+		
 		if (winScreen.isWinScreenActive()) { // if the win screen is up, allow the player to press spacebar to restart the game
 		
 			if (key == ' ') {
@@ -213,11 +282,6 @@ public class Flashback extends PApplet {
 			case ('d'):
 			case ('D'):
 				player.setGoRight(false);
-				break;
-
-			case ('i'):
-			case ('I'):
-				instructionScreen.setInstructionScreenActive(false);
 				break;
 
 			}

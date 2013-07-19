@@ -1,5 +1,6 @@
 package physics;
 
+import enumerations.MonsterType;
 import gameObjects.Bullet;
 import gameObjects.GameObject;
 import gameObjects.Player;
@@ -75,6 +76,8 @@ public class Physics {
 
 				if (m.collide(b)) {
 
+				    MonsterType monsterType = MonsterType.getMonsterTypeFromClassName(m.getClass());
+				    playerEntities.get(0).getScorecard().addMonsterKills(monsterType, 1);
 					m.animateDeath();
 					b.animateDeath();
 
@@ -133,7 +136,7 @@ public class Physics {
 
 		} else if (xPosition > (Flashback.levelData.getLevelWidthPixels() - objectWidth)) {
 
-			Flashback.winScreen.setWinScreenActive(true);
+			//Flashback.winScreen.setWinScreenActive(true);
 			return Flashback.levelData.getLevelWidthPixels() - objectHeight;
 
 		} else

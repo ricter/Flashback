@@ -28,10 +28,9 @@ public class Player extends GameObject{
     private double currentBaseBPS = startingBPS;
     private double heartbeatTimer = 2; //2.0
 	private double maxBPS = 4.0;
-	private double minBPS = 0.5;
+	private double minBPS = 0.20;
 	private double manualHeartRateAdjustment = 0.0;
 	private double damageHeartRateAdjustment = 0.0;
-	
 	
     private float lastFired = 0;    
     
@@ -39,6 +38,8 @@ public class Player extends GameObject{
 	
 	private double yVelocity = 0.0;
 	private double xSpeed = 6.0;
+	
+	private Scorecard scorecard;
 	
 	public Player(PApplet gameScreen, float x, float y, Sprite sprite, PlayerArmSprite armSprite) {
 
@@ -49,14 +50,16 @@ public class Player extends GameObject{
 		this.armSprite.setxOffset(armXOffset);
 		this.armSprite.setyOffset(armYOffset);
 		bulletSpawnPosition = new PVector();
-
+		scorecard = new Scorecard();
+		
 	}
-	public void draw(int x, int y) {
+
+    public void draw(int x, int y) {
 
 		sprite.draw(x + getXPosition(), y + yPosition, flip);
 		armSprite.draw(x + getXPosition(), y + yPosition, flip);
-		gameScreen.text("BPS: "+ getCurrentTotalBPS() + " FRA:" + manualHeartRateAdjustment, 10, 50);
 		gameScreen.fill(255, 0, 0);
+		gameScreen.text("BPS: "+ getCurrentTotalBPS() + " FRA:" + manualHeartRateAdjustment, 10, 40);
 		// line(x+xPos+sprite.img.width *0.5,y+yPos+ sprite.img.height
 		// *0.5,mouseX, mouseY);
 		/*
@@ -71,6 +74,10 @@ public class Player extends GameObject{
 	public double getFireRateAdjustment() {
 		return manualHeartRateAdjustment;
 	}
+	
+	public Scorecard getScorecard() {
+        return scorecard;
+    }
 	
 	public boolean isGoDown() {
 		return goDown;
@@ -96,7 +103,7 @@ public class Player extends GameObject{
 	
 		Flashback.hit.rewind();
 		Flashback.hit.play();
-		damageHeartRateAdjustment -= .25;
+		damageHeartRateAdjustment -= .125;
 		
 	}
 	
@@ -166,7 +173,7 @@ public class Player extends GameObject{
 		// calculate heart rate
 		currentBaseBPS = (float) (startingBPS + Physics.gameEntities.size()/4);
 
-		if (getCurrentTotalBPS() > maxBPS || currentBaseBPS + getCurrentTotalBPS() < minBPS){
+		if (getCurrentTotalBPS() > maxBPS || getCurrentTotalBPS() < minBPS){
 			Flashback.loseScreen.setLoseScreenActive(true);
 		}
 
@@ -225,18 +232,6 @@ public class Player extends GameObject{
 
 	}
 	
-	private double getCurrentTotalBPS(){
-	    
-	    return currentBaseBPS + manualHeartRateAdjustment + damageHeartRateAdjustment;
-	    
-	}
-	
-    private void adjustSpeed() {
-        
-        xSpeed = getCurrentTotalBPS() * 1.5 + 2;
-        
-    }
-
 	private double adjustFireRate() {
 		
 		double adjustedFireRate = (1/getCurrentTotalBPS()) * MS_TO_S;
@@ -245,6 +240,22 @@ public class Player extends GameObject{
 		
 		return adjustedFireRate;
 		
+	}
+	
+    private void adjustSpeed() {
+        
+        xSpeed = getCurrentTotalBPS() * 1.5 + 2;
+        
+    }
+
+	private double getCurrentTotalBPS(){
+	    
+	    double currentTotalBPS = currentBaseBPS + manualHeartRateAdjustment + damageHeartRateAdjustment;
+	    if (currentTotalBPS <= 0){
+	        currentTotalBPS = 0.1;
+	    }
+	    return currentTotalBPS;
+	    
 	}
 
 	private void tryToJump(float deltaT){
