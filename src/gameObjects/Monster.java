@@ -25,9 +25,9 @@ public class Monster extends GameObject {
 	public void update(float deltaT) {
 
 		yVelocity = Physics.applyGravity(yVelocity, deltaT);
-		yPos = Physics.stopAtGround(getxPos(), yPos, -(float) yVelocity * deltaT,
+		yPosition = Physics.stopAtGround(getXPosition(), yPosition, -(float) yVelocity * deltaT,
 				sprite.getCollisionHeight());
-		if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight()))
+		if (Physics.isAtGround(getXPosition(), yPosition, sprite.getCollisionHeight()))
 			yVelocity = 0;
 
 	}

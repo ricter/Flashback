@@ -19,8 +19,8 @@ public class FlyingMonster extends GameObject {
 	public FlyingMonster(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		super(gameScreen, x, y, sprite);
-		targetX = getxPos();
-		targetY = yPos;
+		targetX = getXPosition();
+		targetY = yPosition;
 
 		fireTimer = 0;
 		flip = false;
@@ -29,31 +29,31 @@ public class FlyingMonster extends GameObject {
 
 	public void update(float deltaT) {
 
-		if (targetX - 2 <= getxPos() && targetX + 2 >= getxPos()) {
+		if (targetX - 2 <= getXPosition() && targetX + 2 >= getXPosition()) {
 
-			targetX = Physics.getPlayerEntities().get(0).getxPos()
+			targetX = Physics.getPlayerEntities().get(0).getXPosition()
 					+ gameScreen.random(-300, 300);
-			targetY = Physics.getPlayerEntities().get(0).yPos + 290;
+			targetY = Physics.getPlayerEntities().get(0).yPosition + 290;
 
 		} // end if
 
-		setxPos(getxPos() + ((maxSpeed * deltaT) * (getxPos() < targetX ? 1 : -1)));
+		setXPosition(getXPosition() + ((maxSpeed * deltaT) * (getXPosition() < targetX ? 1 : -1)));
 
-		flip = getxPos() < targetX ? true : false;
+		flip = getXPosition() < targetX ? true : false;
 
 		if (fireTimer < 0) {
 
 			fireTimer = gameScreen.random(minFireRate, maxFireRate);
 
 			Physics.addEnemyBullet(new Bullet( gameScreen,
-					(float) (getxPos() + sprite.getCurrentImage().width * 0.5),
-					(float) (yPos + sprite.getCurrentImage().height * 0.5),
+					(float) (getXPosition() + sprite.getCurrentImage().width * 0.5),
+					(float) (yPosition + sprite.getCurrentImage().height * 0.5),
 					Flashback.bulletSprite, (float) (Physics.getPlayerEntities()
-							.get(0).getxPos()
+							.get(0).getXPosition()
 							+ Physics.getPlayerEntities().get(0).sprite
 									.getCurrentImage().width * 0.5), 
 									(float) (Physics
-							.getPlayerEntities().get(0).yPos
+							.getPlayerEntities().get(0).yPosition
 							+ Physics.getPlayerEntities().get(0).sprite
 									.getCurrentImage().height * 0.5)));
 

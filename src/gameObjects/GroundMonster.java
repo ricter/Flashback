@@ -19,8 +19,8 @@ public class GroundMonster extends Monster {
 	public GroundMonster(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		super(gameScreen, x, y, sprite);
-		targetX = getxPos();
-		targetY = yPos;
+		targetX = getXPosition();
+		targetY = yPosition;
 
 		fireTimer = 0;
 
@@ -28,30 +28,30 @@ public class GroundMonster extends Monster {
 
 	public void update(float deltaT) {
 
-		if (targetX - 2 <= getxPos() && targetX + 2 >= getxPos()) {
+		if (targetX - 2 <= getXPosition() && targetX + 2 >= getXPosition()) {
 
-			targetX = Physics.getPlayerEntities().get(0).getxPos() + gameScreen.random(-300, 300);
-			targetY = Physics.getPlayerEntities().get(0).yPos + 290;
+			targetX = Physics.getPlayerEntities().get(0).getXPosition() + gameScreen.random(-300, 300);
+			targetY = Physics.getPlayerEntities().get(0).yPosition + 290;
 
 		}
 
-		setxPos(getxPos() + ((maxSpeed * deltaT) * (getxPos() < targetX ? 1 : -1)));
+		setXPosition(getXPosition() + ((maxSpeed * deltaT) * (getXPosition() < targetX ? 1 : -1)));
 
-		flip = getxPos() < targetX ? true : false;
+		flip = getXPosition() < targetX ? true : false;
 
 		yVelocity = Physics.applyGravity(yVelocity, deltaT);
-		yPos = Physics.stopAtGround(getxPos(), yPos, -(float) yVelocity * deltaT,
+		yPosition = Physics.stopAtGround(getXPosition(), yPosition, -(float) yVelocity * deltaT,
 				sprite.getCollisionHeight());
-		if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight()))
+		if (Physics.isAtGround(getXPosition(), yPosition, sprite.getCollisionHeight()))
 			yVelocity = 0;
 
 		if (fireTimer < 0) {
 
 			fireTimer = gameScreen.random(minFireRate, maxFireRate);
 
-			Physics.addEnemyBullet(new Bullet(gameScreen, getxPos(), yPos, Flashback.bulletSprite,
-					Physics.getPlayerEntities().get(0).getxPos(), Physics.getPlayerEntities()
-							.get(0).yPos));
+			Physics.addEnemyBullet(new Bullet(gameScreen, getXPosition(), yPosition, Flashback.bulletSprite,
+					Physics.getPlayerEntities().get(0).getXPosition(), Physics.getPlayerEntities()
+							.get(0).yPosition));
 
 		}
 		fireTimer -= deltaT;

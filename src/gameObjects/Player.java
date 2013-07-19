@@ -6,13 +6,14 @@ import graphics.Sprite;
 import main.Flashback;
 import physics.Physics;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 
 public class Player extends GameObject{
 
 	private static final double maxFireRateAdjustment = 2.0;
 	
-	protected Sprite armSprite;
+	protected PlayerArmSprite armSprite;
 	
 	private boolean goLeft = false;
 	private boolean goRight = false;
@@ -25,25 +26,32 @@ public class Player extends GameObject{
 	private double fireRateAdjustment = 0.0;
 	private double lastFired = 0.0;
 
+	private PVector bulletSpawnPosition;
+	
 	private double yVelocity = 0.0;
 	private double xSpeed = 5.0;
 	
-	private float armXOffset = 30;
-	private float armYOffset = 50;
+	private float armXOffset = 40;
+	private float armYOffset = 36;
 	
-	public Player(PApplet gameScreen, float x, float y, Sprite sprite, Sprite armSprite) {
+	public Player(PApplet gameScreen, float x, float y, Sprite sprite, PlayerArmSprite armSprite) {
 
 		super(gameScreen, x, y, sprite);
 		radius = 20;
 		heartbeatTimer = bps;
 		this.armSprite = armSprite;
+		this.armSprite.setxOffset(armXOffset);
+		this.armSprite.setyOffset(armYOffset);
+		bulletSpawnPosition = new PVector();
 
 	}
 	
 	public void draw(int x, int y) {
 
-		sprite.draw(x + getxPos(), y + yPos, flip);
-		armSprite.draw(x + getxPos() + armXOffset, y + yPos + armYOffset, flip);
+		sprite.draw(x + getXPosition(), y + yPosition, flip);
+		armSprite.draw(x + getXPosition(), y + yPosition, flip);
+		gameScreen.text("BPS: "+ bps + " FRA:" + fireRateAdjustment, 10, 50);
+		gameScreen.fill(255, 0, 0);
 		// line(x+xPos+sprite.img.width *0.5,y+yPos+ sprite.img.height
 		// *0.5,mouseX, mouseY);
 		/*
@@ -115,16 +123,19 @@ public class Player extends GameObject{
 		if (gameScreen.millis() - lastFired > adjustFireRate()) { // fire bullet
 
 			lastFired = gameScreen.millis();
-			Physics.addPlayerBullet( new Bullet(gameScreen, (float)(getxPos() + sprite.getCurrentImage().width* 0.5), 
-					(float) (yPos + sprite.getCurrentImage().height * 0.5),
-					Flashback.bulletSprite, gameScreen.mouseX + Flashback.levelData.getxDistanceFromLeftWall(),
-					gameScreen.mouseY,
-					bps));
+			Physics.addPlayerBullet(new Bullet(gameScreen,
+			        getXPosition() - Flashback.xResolution/2 + this.bulletSpawnPosition.x,
+					this.bulletSpawnPosition.y,
+					//(float) (getxPos() + sprite.getCurrentImage().width * 0.5),
+					//(float) (yPos + sprite.getCurrentImage().height * 0.5),
+					Flashback.bulletSprite, gameScreen.mouseX
+							+ Flashback.levelData.getxDistanceFromLeftWall(),
+					gameScreen.mouseY, bps));
 			((PlayerArmSprite) this.armSprite).setFiring(true);
 			
 		} else {
 			
-			((PlayerArmSprite) this.armSprite).setFiring(false);
+			// Player cannot fire yet, do nothing
 			
 		}
 		
@@ -135,7 +146,7 @@ public class Player extends GameObject{
 		// calculate heart rate
 		bps = (float) (1.0 + Physics.gameEntities.size());
 
-		if (bps > 8 || bps <= 0){
+		if (bps > 16 || bps <= 0){
 			Flashback.loseScreen.setLoseScreenActive(true);
 		}
 
@@ -144,13 +155,13 @@ public class Player extends GameObject{
 		if (isGoLeft()) {
 
 			flip = true;
-			setxPos(Physics.stopAtWall(getxPos() - 10, sprite.getCollisionWidth(),
+			setXPosition(Physics.stopAtWall(getXPosition() - 6, sprite.getCollisionWidth(),
 					sprite.getCollisionHeight()));
 
 		} else if (isGoRight()) {
 
 			flip = false;
-			setxPos(Physics.stopAtWall(getxPos() + 10, sprite.getCollisionWidth(),
+			setXPosition(Physics.stopAtWall(getXPosition() + 6, sprite.getCollisionWidth(),
 					sprite.getCollisionHeight()));
 
 		} else {
@@ -165,18 +176,18 @@ public class Player extends GameObject{
 
 		} else if (isGoDown()) {
 
-			if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight())
-					&& !(yPos == Flashback.yResolution - sprite.getCollisionHeight())) {
+			if (Physics.isAtGround(getXPosition(), yPosition, sprite.getCollisionHeight())
+					&& !(yPosition == Flashback.yResolution - sprite.getCollisionHeight())) {
 
-				yPos += 2;
+				yPosition += 2;
 
 			}
 		}
 
 		yVelocity = Physics.applyGravity(yVelocity, deltaT);
-		yPos = Physics.stopAtGround(getxPos(), yPos, -(float) yVelocity * deltaT,
+		yPosition = Physics.stopAtGround(getXPosition(), yPosition, -(float) yVelocity * deltaT,
 				sprite.getCollisionHeight());
-		if (Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight())){
+		if (Physics.isAtGround(getXPosition(), yPosition, sprite.getCollisionHeight())){
 			yVelocity = 0;
 			((PlayerSprite) this.sprite).setJumping(false);
 		}
@@ -207,10 +218,16 @@ public class Player extends GameObject{
 
 	private void tryToJump(float deltaT){
 	
-		if(Physics.isAtGround(getxPos(), yPos, sprite.getCollisionHeight())){
+		if(Physics.isAtGround(getXPosition(), yPosition, sprite.getCollisionHeight())){
 			yVelocity = 200;
 		}
 	
+	}
+
+	public void setBulletSpawnPosition(PVector position) {
+		
+		this.bulletSpawnPosition = position;
+		
 	}
 	
 }

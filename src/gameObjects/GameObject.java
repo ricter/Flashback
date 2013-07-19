@@ -7,8 +7,8 @@ public class GameObject {
 
 	protected PApplet gameScreen;
 	
-	private  float xPos;
-	protected  float yPos;
+	private  float xPosition;
+	protected  float yPosition;
 
 	protected float radius;
 
@@ -20,8 +20,8 @@ public class GameObject {
 	public GameObject(PApplet gameScreen) {
 
 		this.gameScreen = gameScreen;
-		setxPos(0);
-		yPos = 0;
+		setXPosition(0);
+		yPosition = 0;
 		this.sprite = null;
 
 	}
@@ -29,8 +29,8 @@ public class GameObject {
 	public GameObject(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		this.gameScreen = gameScreen;
-		setxPos(x);
-		yPos = y;
+		setXPosition(x);
+		yPosition = y;
 		this.sprite = sprite;
 
 	}
@@ -38,7 +38,7 @@ public class GameObject {
 	public void draw(int x, int y) {
 
 		if (sprite != null) {
-			sprite.draw(getxPos() + x, yPos + y, flip);
+			sprite.draw(getXPosition() + x, yPosition + y, flip);
 		}
 		// image(sprite.img, xPos+x, yPos+y);
 
@@ -58,14 +58,14 @@ public class GameObject {
 			float top1, top2;
 			float bottom1, bottom2;
 
-			left1 = getxPos() + sprite.getCollisionXOffset();
-			left2 = other.getxPos() + other.sprite.getCollisionXOffset();
-			right1 = getxPos() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
-			right2 = other.getxPos() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
-			top1 = yPos + sprite.getCollisionYOffset();
-			top2 = other.yPos + other.sprite.getCollisionYOffset();
-			bottom1 = yPos + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
-			bottom2 = other.yPos + other.sprite.getCollisionYOffset() + other.sprite.getCollisionWidth();
+			left1 = getXPosition() + sprite.getCollisionXOffset();
+			left2 = other.getXPosition() + other.sprite.getCollisionXOffset();
+			right1 = getXPosition() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
+			right2 = other.getXPosition() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
+			top1 = yPosition + sprite.getCollisionYOffset();
+			top2 = other.yPosition + other.sprite.getCollisionYOffset();
+			bottom1 = yPosition + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
+			bottom2 = other.yPosition + other.sprite.getCollisionYOffset() + other.sprite.getCollisionWidth();
 
 			if (flip) {
 				left1 += sprite.getCollisionWidth();
@@ -91,8 +91,8 @@ public class GameObject {
 		} else {
 
 			// circle circle collision for now
-			float distX = other.getxPos() - other.getxPos();
-			float distY = other.yPos - other.yPos;
+			float distX = other.getXPosition() - other.getXPosition();
+			float distY = other.yPosition - other.yPosition;
 
 			return gameScreen.sqrt(distX * distX + distY * distY) <= radius + other.radius;
 
@@ -113,12 +113,20 @@ public class GameObject {
 
 	}
 
-	public float getxPos() {
-		return xPos;
+	public float getXPosition() {
+		return xPosition;
 	}
 
-	public void setxPos(float xPos) {
-		this.xPos = xPos;
+	public void setXPosition(float xPos) {
+		this.xPosition = xPos;
 	}
+	
+	public float getYPosition() {
+        return yPosition;
+    }
+
+    public void setYPosition(float yPos) {
+        this.yPosition = yPos;
+    }
 
 }

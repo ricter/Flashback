@@ -72,96 +72,24 @@ public class Flashback extends PApplet {
 	}
 
 	/**
-	 *  Main setup method that is called on game load.
+	 *  Adds the player to the start of the map and adds them to the physics handler
 	 */
-	public void setup() {
+	public void addPlayerToStart() {
 
-		loadMusic();
-
-		size(1280, 720, P2D);
-		frameRate(baseFrameRate);
-		background(backgroundColor);
-		smooth();
-
-		splashScreen = new SplashScreen(this);
-		splashScreen.drawSplashScreen();
-
-		loadImagesAndSprites();
-
-		createScreens();
-
-		addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent mwe) {
-				mouseWheel(mwe.getWheelRotation());
-			}
-		}); 
-		
-		monsterSpawner = new MonsterSpawner(this);
-
-		addPlayerToStart();
-		//player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
-		//Physics.addPlayerEntity(player);
-
-		levelData = new LevelData(this);
-		levelData.createLevelOneGroundHeights();
-
-		camera = new Camera();
-		renderer = new Renderer(this);
-
-		textSize(32);
-
-		randomSeed(234234324);
-
-		music.play();
+		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
+		Physics.addPlayerEntity(player);
 
 	}
-
+	
 	/**
-	 * 
+	 *  Clears all of the game object arrays (player, npcs, bullets)
 	 */
-	void createScreens() {
+	public void clearGameObjectArrays() {
 
-		introductionScreen = new IntroductionScreen(this, true);
-		instructionScreen = new InstructionScreen(this);
-		winScreen = new WinScreen(this);
-		loseScreen = new LoseScreen(this);
-
-	}
-
-	/**
-	 * 
-	 */
-	void loadImagesAndSprites() {
-
-		backgroundImg = loadImage("../images/bg_full_Background.png");
-		
-		Sprite.setGameScreen(this);
-		
-		PlayerSprite.loadImages();
-		PlayerArmSprite.loadImages();
-		ZombieSprite.loadImages();
-		EyeSprite.loadImages();
-		BulletSprite.loadImages();
-
-		playerSprite = new PlayerSprite();
-		playerArmSprite = new PlayerArmSprite();
-		zombieSprite = new ZombieSprite();
-		eyeSprite = new EyeSprite(100, 100, 0, 50);
-		bulletSprite = new BulletSprite();
-
-	}
-
-	/**
-	 * 
-	 */
-	void loadMusic() {
-
-		minim = new Minim(this);
-		lub = minim.loadFile("../sounds/Lub.wav");
-		dub = minim.loadFile("../sounds/Dub.wav");
-		hit = minim.loadFile("../sounds/Hit.wav");
-		music = minim.loadFile("../sounds/Jeff_Game.wav");
-		music.loop();
+		Physics.getPlayerEntities().clear();
+		Physics.gameEntities.clear();
+		Physics.getPlayerBullets().clear();
+		Physics.getEnemyBullets().clear();
 
 	}
 
@@ -188,26 +116,12 @@ public class Flashback extends PApplet {
 		}
 	}
 
-	public void mousePressed() {
+	public static Player getPlayer(){
 		
-		if (introductionScreen.isIntroductionScreenActive()
-				|| winScreen.isWinScreenActive() || loseScreen.isLoseScreenActive() ) { // Prevent the player from firing while screens are active
+		return player;
+		
+	}
 
-		} else { // try to fire
-			
-			player.tryToFire();
-			
-		}
-		
-	}
-	
-	public void mouseWheel(int delta) {
-		
-		//println("mouse has moved by " + delta + " units."); 
-		player.setFireRateAdjustment(player.getFireRateAdjustment() + (delta * -1) / 2);
-		
-	}
-	
 	/**
 	 *  Handles all keyboard presses
 	 */
@@ -310,25 +224,65 @@ public class Flashback extends PApplet {
 		}
 	}
 
-	/**
-	 *  Clears all of the game object arrays (player, npcs, bullets)
-	 */
-	public void clearGameObjectArrays() {
+	public void mousePressed() {
+		
+		if (introductionScreen.isIntroductionScreenActive()
+				|| winScreen.isWinScreenActive() || loseScreen.isLoseScreenActive() ) { // Prevent the player from firing while screens are active
 
-		Physics.getPlayerEntities().clear();
-		Physics.gameEntities.clear();
-		Physics.getPlayerBullets().clear();
-		Physics.getEnemyBullets().clear();
-
+		} else { // try to fire
+			
+			player.tryToFire();
+			
+		}
+		
 	}
-
+	
+	public void mouseWheel(int delta) {
+		
+		player.setFireRateAdjustment(player.getFireRateAdjustment() + ((double)delta * -1) / 2);
+		
+	}
+	
 	/**
-	 *  Adds the player to the start of the map and adds them to the physics handler
+	 *  Main setup method that is called on game load.
 	 */
-	public void addPlayerToStart() {
+	public void setup() {
 
-		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
-		Physics.addPlayerEntity(player);
+		loadMusic();
+
+		size(1280, 720, P2D);
+		frameRate(baseFrameRate);
+		background(backgroundColor);
+		smooth();
+
+		splashScreen = new SplashScreen(this);
+		splashScreen.drawSplashScreen();
+
+		loadImagesAndSprites();
+
+		createScreens();
+
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent mwe) {
+				mouseWheel(mwe.getWheelRotation());
+			}
+		}); 
+		
+		monsterSpawner = new MonsterSpawner(this);
+
+		addPlayerToStart();
+
+		levelData = new LevelData(this);
+		levelData.createLevelOneGroundHeights();
+
+		camera = new Camera();
+		renderer = new Renderer(this);
+
+		textSize(32);
+
+		randomSeed(234234324);
+
+		music.play();
 
 	}
 
@@ -340,6 +294,55 @@ public class Flashback extends PApplet {
 		lub.close();
 		dub.close();
 		minim.stop();
+
+	}
+
+	/**
+	 * 
+	 */
+	void createScreens() {
+
+		introductionScreen = new IntroductionScreen(this, true);
+		instructionScreen = new InstructionScreen(this);
+		winScreen = new WinScreen(this);
+		loseScreen = new LoseScreen(this);
+
+	}
+
+	/**
+	 * 
+	 */
+	void loadImagesAndSprites() {
+
+		backgroundImg = loadImage("../images/bg_full_Background.png");
+		
+		Sprite.setGameScreen(this);
+		
+		PlayerSprite.loadImages();
+		PlayerArmSprite.loadImages();
+		ZombieSprite.loadImages();
+		EyeSprite.loadImages();
+		BulletSprite.loadImages();
+
+		playerSprite = new PlayerSprite();
+		playerArmSprite = new PlayerArmSprite();
+		zombieSprite = new ZombieSprite();
+		eyeSprite = new EyeSprite(100, 100, 0, 50);
+		bulletSprite = new BulletSprite();
+
+	}
+
+	/**
+	 * 
+	 */
+	void loadMusic() {
+
+		minim = new Minim(this);
+		lub = minim.loadFile("../sounds/Lub.wav");
+		dub = minim.loadFile("../sounds/Dub.wav");
+		hit = minim.loadFile("../sounds/Hit.wav");
+		music = minim.loadFile("../sounds/Jeff_Game.wav");
+		music.loop();
 
 	}
 

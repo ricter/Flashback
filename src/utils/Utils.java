@@ -1,5 +1,8 @@
 package utils;
 
+import processing.core.PApplet;
+import processing.core.PVector;
+
 public class Utils {
 
   public static float scaleXValue = 10;
@@ -8,6 +11,14 @@ public class Utils {
     
     return xPos / scaleXValue;
     
+  }
+  
+  public static void rotatePVector2D (PVector v, float theta){
+	  
+	  float xTemp = v.x;
+	  v.x = v.x * PApplet.cos(theta) - v.y * PApplet.sin(theta);
+	  v.y = xTemp * PApplet.sin(theta) + v.y * PApplet.cos(theta);
+	  
   }
   
   public static float interpolateYPosition(float xPos, float yPos1, float yPos2){

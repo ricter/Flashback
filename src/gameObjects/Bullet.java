@@ -39,8 +39,8 @@ public class Bullet extends GameObject {
 	// updates all variables of the bullet when needed
 	public void update(float deltaT) {
 
-		setxPos(getxPos() + vec.x * vel);
-		yPos = yPos + vec.y * vel;
+		setXPosition(getXPosition() + vec.x * vel);
+		yPosition = yPosition + vec.y * vel;
 		distanceTraveled += gameScreen.abs(vec.x * vel) + gameScreen.abs(vec.y * vel);
 
 	}
@@ -50,7 +50,7 @@ public class Bullet extends GameObject {
 		gameScreen.strokeWeight(1);
 		gameScreen.stroke(240, 7, 42);
 		gameScreen.fill(240, 7, 42);
-		gameScreen.ellipse(x + getxPos(), y + yPos, 5, 5);
+		gameScreen.ellipse(x + getXPosition(), y + yPosition, 5, 5);
 
 	}
 
