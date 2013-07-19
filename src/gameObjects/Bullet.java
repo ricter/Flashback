@@ -6,7 +6,7 @@ import processing.core.PVector;
 
 public class Bullet extends GameObject {
 
-	private float vel = 10;
+	private float vel = 15;
 	private PVector vec;
 	private float distanceTraveled = 0;
 	private float maxDistance = 2000;

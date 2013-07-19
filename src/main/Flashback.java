@@ -231,15 +231,21 @@ public class Flashback extends PApplet {
 
 		} else { // try to fire
 			
-			player.tryToFire();
+			player.setTryToFire(true);
 			
 		}
 		
 	}
 	
+	public void mouseReleased() {
+	    
+	    player.setTryToFire(false);
+	    
+	}
+	
 	public void mouseWheel(int delta) {
 		
-		player.setFireRateAdjustment(player.getFireRateAdjustment() + ((double)delta * -1) / 2);
+		player.setFireRateAdjustment(player.getFireRateAdjustment() + ((double)delta * -1) / 5);
 		
 	}
 	

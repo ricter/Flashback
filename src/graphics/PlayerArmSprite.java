@@ -132,7 +132,6 @@ public class PlayerArmSprite extends Sprite {
         Utils.rotatePVector2D(bulletSpawnLocation, angle);
         bulletSpawnLocation.set(bulletSpawnLocation.x + rotationXOffset, bulletSpawnLocation.y + rotationYOffset, 0);
         Flashback.getPlayer().setBulletSpawnPosition(bulletSpawnLocation);
-        System.out.println("xR: " + rotationXOffset + " BSLX: " + bulletSpawnLocation.x + "yR: " + rotationYOffset + "BSLY: " + bulletSpawnLocation.y);
         
     }
 

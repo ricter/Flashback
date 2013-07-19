@@ -11,46 +11,51 @@ import processing.core.PVector;
 
 public class Player extends GameObject{
 
-	private static final double maxFireRateAdjustment = 2.0;
+	private static final double maxFireRateAdjustment = 0.5;
+	private static final double MS_TO_S = 1000;
 	
 	protected PlayerArmSprite armSprite;
+	private float armXOffset = 40;
+    private float armYOffset = 36;
 	
 	private boolean goLeft = false;
 	private boolean goRight = false;
 	private boolean goUp = false;
 	private boolean goDown = false;
+	private boolean tryToFire = false;
 
-	private double bps = 1.0;
-	private double heartbeatTimer = 2; //2.0
-	private double fireRate = 0.7;
-	private double fireRateAdjustment = 0.0;
-	private double lastFired = 0.0;
-
+	private double startingBPS = 1.0;
+    private double currentBaseBPS = startingBPS;
+    private double heartbeatTimer = 2; //2.0
+	private double maxBPS = 4.0;
+	private double minBPS = 0.5;
+	private double manualHeartRateAdjustment = 0.0;
+	private double damageHeartRateAdjustment = 0.0;
+	
+	
+    private float lastFired = 0;    
+    
 	private PVector bulletSpawnPosition;
 	
 	private double yVelocity = 0.0;
-	private double xSpeed = 5.0;
-	
-	private float armXOffset = 40;
-	private float armYOffset = 36;
+	private double xSpeed = 6.0;
 	
 	public Player(PApplet gameScreen, float x, float y, Sprite sprite, PlayerArmSprite armSprite) {
 
 		super(gameScreen, x, y, sprite);
 		radius = 20;
-		heartbeatTimer = bps;
+		heartbeatTimer = currentBaseBPS;
 		this.armSprite = armSprite;
 		this.armSprite.setxOffset(armXOffset);
 		this.armSprite.setyOffset(armYOffset);
 		bulletSpawnPosition = new PVector();
 
 	}
-	
 	public void draw(int x, int y) {
 
 		sprite.draw(x + getXPosition(), y + yPosition, flip);
 		armSprite.draw(x + getXPosition(), y + yPosition, flip);
-		gameScreen.text("BPS: "+ bps + " FRA:" + fireRateAdjustment, 10, 50);
+		gameScreen.text("BPS: "+ getCurrentTotalBPS() + " FRA:" + manualHeartRateAdjustment, 10, 50);
 		gameScreen.fill(255, 0, 0);
 		// line(x+xPos+sprite.img.width *0.5,y+yPos+ sprite.img.height
 		// *0.5,mouseX, mouseY);
@@ -62,11 +67,11 @@ public class Player extends GameObject{
 		 */
 
 	}
-
+	
 	public double getFireRateAdjustment() {
-		return fireRateAdjustment;
+		return manualHeartRateAdjustment;
 	}
-
+	
 	public boolean isGoDown() {
 		return goDown;
 	}
@@ -74,7 +79,7 @@ public class Player extends GameObject{
 	public boolean isGoLeft() {
 		return goLeft;
 	}
-	
+
 	public boolean isGoRight() {
 		return goRight;
 	}
@@ -83,22 +88,31 @@ public class Player extends GameObject{
 		return goUp;
 	}
 	
+	public boolean isTryToFire() {
+        return tryToFire;
+    }
+
 	public void OnCollision(){
 	
 		Flashback.hit.rewind();
 		Flashback.hit.play();
-		fireRate -= 0.01;
-		fireRate = fireRate < 0 ? 0 : fireRate; 
-	
+		damageHeartRateAdjustment -= .25;
+		
 	}
 	
-	public void setFireRateAdjustment(double fireRateAdjustment) {
+	public void setBulletSpawnPosition(PVector position) {
 		
-		if (fireRateAdjustment > 2.0){
-			this.fireRateAdjustment = 2.0;
-		} else if (fireRateAdjustment < -2.0){
-			this.fireRateAdjustment = -2.0;
-		} else this.fireRateAdjustment = fireRateAdjustment;
+		this.bulletSpawnPosition = position;
+		
+	}
+	
+	public void setFireRateAdjustment(double heartRateAdjustment) {
+		
+		if (heartRateAdjustment > maxFireRateAdjustment){
+			this.manualHeartRateAdjustment = maxFireRateAdjustment;
+		} else if (heartRateAdjustment < -maxFireRateAdjustment){
+			this.manualHeartRateAdjustment = -maxFireRateAdjustment;
+		} else this.manualHeartRateAdjustment = heartRateAdjustment;
 		
 	}
 
@@ -118,25 +132,31 @@ public class Player extends GameObject{
 		this.goUp = goUp;
 	}
 
+	public void setTryToFire(boolean tryToFire) {
+        this.tryToFire = tryToFire;
+    }
+
 	public void tryToFire(){
 		
-		if (gameScreen.millis() - lastFired > adjustFireRate()) { // fire bullet
+		double adjustedFireRate = adjustFireRate();
+        if (gameScreen.millis() - lastFired > adjustedFireRate) { // fire bullet
 
-			lastFired = gameScreen.millis();
-			Physics.addPlayerBullet(new Bullet(gameScreen,
-			        getXPosition() - Flashback.xResolution/2 + this.bulletSpawnPosition.x,
-					this.bulletSpawnPosition.y,
-					//(float) (getxPos() + sprite.getCurrentImage().width * 0.5),
-					//(float) (yPos + sprite.getCurrentImage().height * 0.5),
-					Flashback.bulletSprite, gameScreen.mouseX
-							+ Flashback.levelData.getxDistanceFromLeftWall(),
-					gameScreen.mouseY, bps));
-			((PlayerArmSprite) this.armSprite).setFiring(true);
+            //System.out.println("gameScreen.millis():" + gameScreen.millis() + " lastFired:" + lastFired + " adjustedFireRate:" + adjustedFireRate);
+            lastFired = gameScreen.millis();
+            Physics.addPlayerBullet(new Bullet(gameScreen,
+                                               getXPosition() - Flashback.xResolution / 2 + this.bulletSpawnPosition.x,
+                                               this.bulletSpawnPosition.y,
+                                               Flashback.bulletSprite,
+                                               gameScreen.mouseX + Flashback.levelData.getxDistanceFromLeftWall(),
+                                               gameScreen.mouseY,
+                                               getCurrentTotalBPS()));
+            ((PlayerArmSprite) this.armSprite).setFiring(true);
 			
 		} else {
 			
 			// Player cannot fire yet, do nothing
-			
+			//System.out.println("Can't fire yet.");
+		    
 		}
 		
 	}
@@ -144,24 +164,24 @@ public class Player extends GameObject{
 	public void update(float deltaT) {
 
 		// calculate heart rate
-		bps = (float) (1.0 + Physics.gameEntities.size());
+		currentBaseBPS = (float) (startingBPS + Physics.gameEntities.size()/4);
 
-		if (bps > 16 || bps <= 0){
+		if (getCurrentTotalBPS() > maxBPS || currentBaseBPS + getCurrentTotalBPS() < minBPS){
 			Flashback.loseScreen.setLoseScreenActive(true);
 		}
 
-		xSpeed = 5.0 * (bps / 10 + 1);
+		adjustSpeed();
 
 		if (isGoLeft()) {
 
 			flip = true;
-			setXPosition(Physics.stopAtWall(getXPosition() - 6, sprite.getCollisionWidth(),
+			setXPosition(Physics.stopAtWall(getXPosition() - (float)xSpeed, sprite.getCollisionWidth(),
 					sprite.getCollisionHeight()));
 
 		} else if (isGoRight()) {
 
 			flip = false;
-			setXPosition(Physics.stopAtWall(getXPosition() + 6, sprite.getCollisionWidth(),
+			setXPosition(Physics.stopAtWall(getXPosition() + (float)xSpeed, sprite.getCollisionWidth(),
 					sprite.getCollisionHeight()));
 
 		} else {
@@ -191,7 +211,11 @@ public class Player extends GameObject{
 			yVelocity = 0;
 			((PlayerSprite) this.sprite).setJumping(false);
 		}
-			
+		
+		if (tryToFire){
+		    tryToFire();
+		}
+		
 		/*
 		 * heartbeatTimer -= bps*deltaT; if(heartbeatTimer < 0) { heartbeatTimer
 		 * = 2.0; if(dub != null) { lub.rewind(); lub.play(); } } else if(
@@ -200,17 +224,24 @@ public class Player extends GameObject{
 		 */
 
 	}
+	
+	private double getCurrentTotalBPS(){
+	    
+	    return currentBaseBPS + manualHeartRateAdjustment + damageHeartRateAdjustment;
+	    
+	}
+	
+    private void adjustSpeed() {
+        
+        xSpeed = getCurrentTotalBPS() * 1.5 + 2;
+        
+    }
 
 	private double adjustFireRate() {
 		
-		double limitedBPS = bps + fireRateAdjustment;
-		if (limitedBPS > 6){
-			limitedBPS = 6;
-		} else if (limitedBPS < 2) {
-			limitedBPS = 2;
-		}
+		double adjustedFireRate = (1/getCurrentTotalBPS()) * MS_TO_S;
 		
-		double adjustedFireRate = fireRate;
+		//System.out.println("currentBPS:" + currentBPS + " adjustedFireRate:" + adjustedFireRate + " limitedBPS:" + limitedBPS);
 		
 		return adjustedFireRate;
 		
@@ -222,12 +253,6 @@ public class Player extends GameObject{
 			yVelocity = 200;
 		}
 	
-	}
-
-	public void setBulletSpawnPosition(PVector position) {
-		
-		this.bulletSpawnPosition = position;
-		
 	}
 	
 }
