@@ -60,6 +60,9 @@ public class Flashback extends PApplet {
 
 	MonsterSpawner monsterSpawner;
 	Renderer renderer;
+	
+	private static double instructionTextAlpha = 100;
+	private static boolean loaded = false;
 
 	/**
 	 * Main driver to kick off the program.
@@ -98,7 +101,9 @@ public class Flashback extends PApplet {
 	 */
 	public void draw() {
 
-		if (introductionScreen.isIntroductionScreenActive()) {
+	    if (!loaded){
+	        splashScreen.drawSplashScreen();
+	    } else if (introductionScreen.isIntroductionScreenActive()) {
 			introductionScreen.drawIntroductionScreen();
 		} else if (winScreen.isWinScreenActive()) {
 			winScreen.drawWinScreen();
@@ -113,12 +118,15 @@ public class Flashback extends PApplet {
 
 			renderer.drawGameObjects();
 			
-            fill(255, 255, 255);
-			text("i: instructions", xResolution - 250, 40);
+			if (instructionTextAlpha > 0){
+			    fill(255, 255, 255, (float)instructionTextAlpha);
+	            instructionTextAlpha = instructionTextAlpha - .25;
+	            text("i: instructions", xResolution - 250, 40);
+			}
 
 		}
 	}
-
+	
 	public static Player getPlayer(){
 		
 		return player;
@@ -353,6 +361,7 @@ public class Flashback extends PApplet {
 		randomSeed(234234324);
 
 		music.play();
+		loaded = true;
 
 	}
 
