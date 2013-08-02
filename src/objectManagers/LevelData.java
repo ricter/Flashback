@@ -1,21 +1,24 @@
 package objectManagers;
 
+import gameObjects.BoundingObject;
+import graphics.BoundingSprite;
+
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.FileReader;
-import java.util.Iterator;
 
 import main.Flashback;
-import processing.core.PApplet;
-import utils.Utils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import physics.Physics;
+import processing.core.PApplet;
+import utils.Utils;
 
 public class LevelData {
 
@@ -104,7 +107,7 @@ public class LevelData {
 	
 	private void loadLevel() {
 		try {
-			Object raw = parser.parse(new FileReader("../levels/level.json"));
+			Object raw = parser.parse(new FileReader("../levels/level1.json"));
 			level = (JSONObject)raw; 
 			
 			levelHeight = (Integer)level.get("height");
@@ -153,6 +156,17 @@ public class LevelData {
 		groundHeights = new ArrayList<ArrayList<Float>>(2);
 		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
 		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
+		
+		BoundingSprite floorSprite = new BoundingSprite(true);
+		BoundingObject floor = new BoundingObject(gameScreen, 0, Flashback.yResolution, floorSprite);
+        Physics.addWallEntity(floor);
+        
+        BoundingSprite leftWallSprite = new BoundingSprite();
+        BoundingObject leftWall = new BoundingObject(gameScreen, 0, 0, leftWallSprite);
+        Physics.addWallEntity(leftWall);
+        
+        BoundingObject rightWall = new BoundingObject(gameScreen, Flashback.xResolution, 0, new BoundingSprite());
+        Physics.addWallEntity(rightWall);
 
 		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
 

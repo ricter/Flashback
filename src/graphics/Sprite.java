@@ -1,28 +1,26 @@
 package graphics;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 
 public abstract class Sprite {
 
 	static PApplet gameScreen;
-
-	public static PApplet getGameScreen() {
-		return gameScreen;
-	}
-	
-	public static void setGameScreen(PApplet gameScreen) {
-		Sprite.gameScreen = gameScreen;
-	}
 	
 	PImage currentImage;
-	private int collisionXOffset;
-	private int collisionYOffset;
 	
-	private int collisionWidth;
-
-	private int collisionHeight;
-	
+    private int collisionXOffset;
+    private int collisionYOffset;
+    private int collisionWidth;
+    private int collisionHeight;
+    
+    boolean movingImage;
+    private int imageNumber = 0;
+    private int fpsCount = 0;
+    private int animationSpeed = 5;
+    
 	public Sprite(PImage img) {
 		
 		this.currentImage = img;
@@ -34,7 +32,7 @@ public abstract class Sprite {
 		collisionHeight = img.height;
 
 	}
-
+	
 	public Sprite(PImage img, int width, int height, int xOffset, int yOffset) {
 		
 		this.currentImage = img;
@@ -46,10 +44,59 @@ public abstract class Sprite {
 		collisionHeight = height;
 
 	}
+	
+	public abstract PImage getStaticImage();
+	public abstract ArrayList<PImage> getMovingImages();
+	
+	public static PApplet getGameScreen() {
+		return gameScreen;
+	}
 
-	public abstract void draw(float x, float y);
+	public static void setGameScreen(PApplet gameScreen) {
+		Sprite.gameScreen = gameScreen;
+	}
 
-	public abstract void draw(float x, float y, boolean flip);
+    public void draw(float x, float y) {
+
+        gameScreen.image(currentImage, x, y);
+        
+        if(fpsCount++ > animationSpeed) {
+            fpsCount = 0;
+            imageNumber++;
+            if (imageNumber == getMovingImages().size()){
+                imageNumber = 0;
+            }
+            System.out.println(imageNumber);
+            currentImage = getMovingImages().get(imageNumber);
+        }
+        
+    }
+
+    public void draw(float x, float y, boolean flip) {
+        
+        if (flip) {
+
+            gameScreen.pushMatrix();
+            gameScreen.translate(x + currentImage.width, y);
+            gameScreen.scale(-1, 1);
+            gameScreen.image(currentImage, 0, 0);
+            gameScreen.popMatrix();
+
+        } else {
+            gameScreen.image(currentImage, x, y);
+        }
+        
+        if (movingImage){
+            
+            imageNumber++;
+            if (imageNumber == getMovingImages().size()){
+                imageNumber = 0;
+            }
+            currentImage = getMovingImages().get(imageNumber);
+            
+        }
+        
+    }
 
 	public int getCollisionHeight() {
 		return collisionHeight;

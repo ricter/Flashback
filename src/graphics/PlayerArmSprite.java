@@ -10,6 +10,7 @@ import utils.Utils;
 
 public class PlayerArmSprite extends Sprite {
 
+    static PImage staticImage;
     private static ArrayList<PImage> runImages;
 
     private static PImage idleImage;
@@ -34,29 +35,13 @@ public class PlayerArmSprite extends Sprite {
         super(idleImage, width, height, xOffset, yOffset);
 
     }
-
-    public float getxOffset() {
-        return xOffset;
-    }
-
-    public float getyOffset() {
-        return yOffset;
-    }
-
+    
     public static void loadImages() {
 
         idleImage = gameScreen.loadImage("../images/commandoPlayerGun.png");
         firingImage = gameScreen
                 .loadImage("../images/commandoPlayerGunFire.png");
 
-    }
-
-    public void setxOffset(float xOffset) {
-        this.xOffset = xOffset;
-    }
-
-    public void setyOffset(float yOffset) {
-        this.yOffset = yOffset;
     }
 
     @Override
@@ -118,6 +103,40 @@ public class PlayerArmSprite extends Sprite {
 
     }
 
+    @Override
+    public ArrayList<PImage> getMovingImages() {
+        return runImages;
+    }
+
+    @Override
+    public PImage getStaticImage() {
+        return staticImage;
+    }
+
+    public float getxOffset() {
+        return xOffset;
+    }
+
+    public float getyOffset() {
+        return yOffset;
+    }
+
+    public boolean isFiring() {
+        return isFiring;
+    }
+
+    public void setFiring(boolean isFiring) {
+        this.isFiring = isFiring;
+    }
+
+    public void setxOffset(float xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public void setyOffset(float yOffset) {
+        this.yOffset = yOffset;
+    }
+
     private void updateBulletSpawnPosition(float angle,
                                            float rotationXOffset,
                                            float rotationYOffset,
@@ -133,14 +152,6 @@ public class PlayerArmSprite extends Sprite {
         bulletSpawnLocation.set(bulletSpawnLocation.x + rotationXOffset, bulletSpawnLocation.y + rotationYOffset, 0);
         Flashback.getPlayer().setBulletSpawnPosition(bulletSpawnLocation);
         
-    }
-
-    public boolean isFiring() {
-        return isFiring;
-    }
-
-    public void setFiring(boolean isFiring) {
-        this.isFiring = isFiring;
     }
 
 }

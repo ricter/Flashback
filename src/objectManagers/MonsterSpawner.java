@@ -41,7 +41,7 @@ public class MonsterSpawner {
 
 			curAirSpawnRate = gameScreen.random(minAirSpawnRate, maxAirSpawnRate);
 			airSpawnTimer = 0;
-			spawnAirEnemy();
+			//spawnAirEnemy();
 
 		}
 
@@ -50,7 +50,7 @@ public class MonsterSpawner {
 
 			curGroundSpawnRate = gameScreen.random(minGroundSpawnRate, maxGroundSpawnRate);
 			groundSpawnTimer = 0;
-			spawnGroundEnemy();
+			//spawnGroundEnemy();
 
 		}
 
@@ -76,9 +76,10 @@ public class MonsterSpawner {
 		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
 				+ ((bias > 0) ? Flashback.xResolution + 80 : -80);
 		float spawnPointY = gameScreen.random(0, 400);
-		spawnPointY = Physics.calculateNearestGroundBeneath(
+		//TODO Re-add ability to spawn at ground
+		/*spawnPointY = Physics.calculateNearestGroundBeneath(
 				Flashback.levelData.getGround(spawnPointX), spawnPointY,
-				Flashback.zombieSprite.getCollisionHeight());
+				Flashback.zombieSprite.getCollisionHeight());*/
 
 		Physics.addGameEntity(new GroundMonster(gameScreen, spawnPointX, spawnPointY,
 				Flashback.zombieSprite));

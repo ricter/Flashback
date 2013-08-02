@@ -1,65 +1,27 @@
 package gameObjects;
 
 import graphics.Sprite;
-import main.Flashback;
-import physics.Physics;
+
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
-public class FlyingMonster extends GameObject {
-
-	private float targetX;
-	private float targetY;
-
-	private float fireTimer;
-	private float minFireRate = 1; // 1.5
-	private float maxFireRate = 4;
-
-	private float maxSpeed = 120;
-
+public class FlyingMonster extends Monster {
+    
 	public FlyingMonster(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		super(gameScreen, x, y, sprite);
-		targetX = getXPosition();
-		targetY = yPosition;
+		targetX = getxPosition();
+		targetY = getyPosition();
+		
+		isAffectedByGravity = false;
+		maxManualXAcceleration = 35;
 
 		fireTimer = 0;
-		flip = false;
+		flipImage = false;
 
+		this.listOfCollideableObjects = new ArrayList<ArrayList<? extends GameObject>>();
+		
 	}
-
-	public void update(float deltaT) {
-
-		if (targetX - 2 <= getXPosition() && targetX + 2 >= getXPosition()) {
-
-			targetX = Physics.getPlayerEntities().get(0).getXPosition()
-					+ gameScreen.random(-300, 300);
-			targetY = Physics.getPlayerEntities().get(0).yPosition + 290;
-
-		} // end if
-
-		setXPosition(getXPosition() + ((maxSpeed * deltaT) * (getXPosition() < targetX ? 1 : -1)));
-
-		flip = getXPosition() < targetX ? true : false;
-
-		if (fireTimer < 0) {
-
-			fireTimer = gameScreen.random(minFireRate, maxFireRate);
-
-			Physics.addEnemyBullet(new Bullet( gameScreen,
-					(float) (getXPosition() + sprite.getCurrentImage().width * 0.5),
-					(float) (yPosition + sprite.getCurrentImage().height * 0.5),
-					Flashback.bulletSprite, (float) (Physics.getPlayerEntities()
-							.get(0).getXPosition()
-							+ Physics.getPlayerEntities().get(0).sprite
-									.getCurrentImage().width * 0.5), 
-									(float) (Physics
-							.getPlayerEntities().get(0).yPosition
-							+ Physics.getPlayerEntities().get(0).sprite
-									.getCurrentImage().height * 0.5)));
-
-		} // end if
-		fireTimer -= deltaT;
-
-	} // end update
 
 }

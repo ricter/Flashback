@@ -1,23 +1,36 @@
 package gameObjects;
 
 import graphics.Sprite;
+
+import java.util.ArrayList;
+
+import physics.Physics;
 import processing.core.PApplet;
 
 public class GameObject {
 
 	protected PApplet gameScreen;
 	
-	private  float xPosition;
-	protected  float yPosition;
-
-	protected float radius;
-
-	protected boolean flip;
-	protected boolean removeMe = false;
-
+	protected ArrayList<ArrayList<? extends GameObject>> listOfCollideableObjects;
+	
+	protected float xPosition;
+	protected float xVelocity;
+	protected float xAcceleration;
+	protected float yPosition;
+	protected float yVelocity;
+	protected float yAcceleration;
+	
+	protected float maxManualXAcceleration;
+	protected float maxYVelocity = 2000;
+	protected float maxXVelocity = 2000;
+	protected boolean isAffectedByGravity = true;
+	
 	protected Sprite sprite;
+	protected boolean flipImage;
 
-	public GameObject(PApplet gameScreen) {
+    protected boolean removeMe = false;
+
+    public GameObject(PApplet gameScreen) {
 
 		this.gameScreen = gameScreen;
 		setXPosition(0);
@@ -26,7 +39,7 @@ public class GameObject {
 
 	}
 
-	public GameObject(PApplet gameScreen, float x, float y, Sprite sprite) {
+    public GameObject(PApplet gameScreen, float x, float y, Sprite sprite) {
 
 		this.gameScreen = gameScreen;
 		setXPosition(x);
@@ -35,85 +48,176 @@ public class GameObject {
 
 	}
 
-	public void draw(int x, int y) {
-
-		if (sprite != null) {
-			sprite.draw(getXPosition() + x, yPosition + y, flip);
-		}
-
-	}
-
-	// Should never be called, should be overloaded by any children
-	public void update(float deltaT) {
-	    
-	}
-
-	public boolean collide(GameObject other) {
-
-	    float left1, left2;
-        float right1, right2;
-        float top1, top2;
-        float bottom1, bottom2;
-
-        left1 = getXPosition() + sprite.getCollisionXOffset();
-        left2 = other.getXPosition() + other.sprite.getCollisionXOffset();
-        right1 = getXPosition() + sprite.getCollisionXOffset() + sprite.getCollisionWidth();
-        right2 = other.getXPosition() + other.sprite.getCollisionXOffset() + other.sprite.getCollisionWidth();
-        top1 = yPosition + sprite.getCollisionYOffset();
-        top2 = other.yPosition + other.sprite.getCollisionYOffset();
-        bottom1 = yPosition + sprite.getCollisionYOffset() + sprite.getCollisionHeight();
-        bottom2 = other.yPosition + other.sprite.getCollisionYOffset() + other.sprite.getCollisionWidth();
-
-        if (flip) {
-            left1 += sprite.getCollisionWidth();
-            right1 += sprite.getCollisionWidth();
-        }
-        /*
-         * if(other.flip) { right2 -= other.sprite.collisionWidth; left2 -=
-         * other.sprite.collisionWidth; }
-         */
-
-        if (bottom1 < top2)
-            return false;
-        if (top1 > bottom2)
-            return false;
-
-        if (right1 < left2)
-            return false;
-        if (left1 > right2)
-            return false;
-
-        return true;
-
-	}
-
-	public boolean shouldRemove() {
-
-		// println(distanceTraveled);
-		return removeMe;
-
-	}
-
-	public void animateDeath() {
+    public void animateDeath() {
 
 		removeMe = true;
 
 	}
 
-	public float getXPosition() {
-		return xPosition;
+    public void computeVelocity(float deltaT){
+        
+        xVelocity += xAcceleration * (deltaT);
+        if (isAffectedByGravity){
+            yAcceleration += Physics.GRAVITY_ACCELERATION;  
+        }
+        yVelocity += yAcceleration * (deltaT);
+        
+        
+        // Bound velocity
+        xVelocity = (xVelocity > maxXVelocity) ? maxXVelocity : xVelocity;
+        xVelocity = (xVelocity < -maxXVelocity) ? -maxXVelocity : xVelocity;
+        yVelocity = (yVelocity > maxYVelocity) ? maxYVelocity : yVelocity;
+        yVelocity = (yVelocity < -maxYVelocity) ? -maxYVelocity : yVelocity;
+        
+        //System.out.println("xAcceleration: " + xAcceleration + " yAcceleration: " + yAcceleration);
+        //System.out.println("xVelocity: " + xVelocity + " yVelocity " + yVelocity);
+        
 	}
+
+    public void draw(int x, int y) {
+
+		if (sprite != null) {
+			sprite.draw(getxPosition() + x, yPosition + y, flipImage);
+		}
+
+	}
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public float getxAcceleration() {
+        return xAcceleration;
+    }
+
+    public float getxPosition() {
+        return xPosition;
+    }
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
+
+    public float getyAcceleration() {
+        return yAcceleration;
+    }
+	
+    public float getyPosition() {
+        return yPosition;
+    }
+
+	public float getyVelocity() {
+        return yVelocity;
+    }
+
+	public boolean isFlipImage() {
+        return flipImage;
+    }
+
+	public void setxAcceleration(float xAcceleration) {
+        this.xAcceleration = xAcceleration;
+    }
+
+	public void setxPosition(float xPosition) {
+        this.xPosition = xPosition;
+    }
 
 	public void setXPosition(float xPos) {
 		this.xPosition = xPos;
 	}
-	
-	public float getYPosition() {
-        return yPosition;
+
+	public void setxVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
     }
 
-    public void setYPosition(float yPos) {
+	public void setyAcceleration(float yAcceleration) {
+        this.yAcceleration = yAcceleration;
+    }
+
+	public void setyPosition(float yPosition) {
+        this.yPosition = yPosition;
+    }
+
+	public void setYPosition(float yPos) {
         this.yPosition = yPos;
     }
+	
+	public void setyVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
 
+    public boolean shouldRemove() {
+		return removeMe;
+	}
+
+	/** Should never be called directly, should be overloaded by any children */
+	public void update(float deltaT) {
+	    
+	}
+	
+	public void updateMovement(float deltaT){
+	    
+	    // try to move
+	    float oldX = xPosition;
+	    float oldY = yPosition;
+	    xPosition += xVelocity * deltaT;
+        yPosition += yVelocity * deltaT;
+	    
+	    for (ArrayList<? extends GameObject> list : listOfCollideableObjects){
+	        
+	        for (GameObject gameObject : list){
+	            
+	            switch (Physics.checkCollision(this, gameObject, flipImage, gameObject.flipImage)){
+	                
+	                case XANDY:
+	                    
+	                    triggerXCollision(oldX);
+	                    triggerYCollision(oldY);
+	                    break;
+	                
+	                case X:
+	                    
+	                    triggerXCollision(oldX);
+	                    break;
+	                    
+	                case Y:
+	                    
+	                    triggerYCollision(oldY);
+	                    break;
+	                
+	                    // all other cases do nothing
+	            }
+	            
+	        }
+	        
+	    }
+	    
+	}
+	
+	public void triggerXCollision(float oldX){
+	    
+	    xVelocity = 0;
+        xAcceleration = 0;
+        xPosition = oldX;
+	    
+	}
+	
+	public void triggerYCollision(float oldY){
+        
+	    yVelocity = 0;
+        yAcceleration = 0;
+        yPosition = oldY;
+        
+    }
+
+    public boolean skipXCollision() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean skipYCollision() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+	
 }

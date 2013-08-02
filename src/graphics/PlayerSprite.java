@@ -9,7 +9,28 @@ public class PlayerSprite extends Sprite{
 	private static ArrayList<PImage> jumpImages;
 	private static ArrayList<PImage> runImages;
 	
+	static PImage staticImage;
 	private static PImage idleImage;
+	
+	private int jumpingImageNumber = 0;
+	private int runningImageNumber = 0;
+	private static int fpsCount = 0;
+	private static int animationSpeed = 5;
+	private boolean isJumping = false;
+	private boolean isRunning = false;
+
+	public PlayerSprite() {
+		super(idleImage);
+	}
+
+	public PlayerSprite(int width, int height, int xOffset, int yOffset) {
+		super(idleImage, width, height, xOffset, yOffset);
+	}
+
+	@Override
+    public PImage getStaticImage() {
+        return staticImage;
+    }
 	
 	public static void loadImages(){
 		
@@ -26,29 +47,6 @@ public class PlayerSprite extends Sprite{
 		jumpImages = new ArrayList<PImage>();
 		jumpImages.add(gameScreen.loadImage("../images/commando_jump_no_gun.png"));
 		jumpImages.addAll(runImages);
-		
-	}
-	
-	private int jumpingImageNumber = 0;
-	private int runningImageNumber = 0;
-	private static int fpsCount = 0;
-	private static int animationSpeed = 5;
-	
-	private boolean isJumping = false;
-
-	private boolean isRunning = false;
-
-	public PlayerSprite() {
-		super(idleImage);
-	}
-
-	public PlayerSprite(int width, int height, int xOffset, int yOffset) {
-		super(idleImage, width, height, xOffset, yOffset);
-	}
-	@Override
-	public void draw(float x, float y) {
-
-		gameScreen.image(currentImage, x, y);
 		
 	}
 	
@@ -113,5 +111,11 @@ public class PlayerSprite extends Sprite{
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
+
+    @Override
+    public ArrayList<PImage> getMovingImages() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

@@ -12,7 +12,6 @@ public class Renderer {
 		this.gameScreen = gameScreen;
 	}
 	
-	
 	/**
 	 * draw order - background image, level data, enemies, player, bullets
 	 */
@@ -22,8 +21,13 @@ public class Renderer {
 		gameScreen.image(Flashback.backgroundImg, -Flashback.levelData.getxDistanceFromLeftWall(), 0);
 		Flashback.levelData.draw(Flashback.levelData.getxDistanceFromLeftWall(), 0);
 
-		for (int index = 0; index < Physics.gameEntities.size(); index++) {
-			Physics.gameEntities.get(index).draw(
+		for (int index = 0; index < Physics.getWalls().size(); index++) {
+            Physics.getWalls().get(index).draw(
+                    -Flashback.levelData.getxDistanceFromLeftWall(), 0);
+        }
+		
+		for (int index = 0; index < Physics.getGameEntities().size(); index++) {
+			Physics.getGameEntities().get(index).draw(
 					-Flashback.levelData.getxDistanceFromLeftWall(), 0);
 		}
 

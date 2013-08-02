@@ -7,6 +7,7 @@ import graphics.PlayerArmSprite;
 import graphics.PlayerSprite;
 import graphics.Renderer;
 import graphics.Sprite;
+import graphics.BoundingSprite;
 import graphics.ZombieSprite;
 
 import java.awt.event.MouseWheelEvent;
@@ -90,9 +91,10 @@ public class Flashback extends PApplet {
 	public void clearGameObjectArrays() {
 
 		Physics.getPlayerEntities().clear();
-		Physics.gameEntities.clear();
+		Physics.getGameEntities().clear();
 		Physics.getPlayerBullets().clear();
 		Physics.getEnemyBullets().clear();
+		Physics.getWalls().clear();
 
 	}
 
@@ -402,6 +404,7 @@ public class Flashback extends PApplet {
 		ZombieSprite.loadImages();
 		EyeSprite.loadImages();
 		BulletSprite.loadImages();
+		BoundingSprite.loadImages();
 
 		playerSprite = new PlayerSprite();
 		playerArmSprite = new PlayerArmSprite();
