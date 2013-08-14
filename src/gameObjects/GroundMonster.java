@@ -21,7 +21,7 @@ public class GroundMonster extends Monster {
 		flipImage = false;
 		
 		this.listOfCollideableObjects = new ArrayList<ArrayList<? extends GameObject>>();
-		this.listOfCollideableObjects.add(Physics.getWalls());
+		this.listOfCollideableObjects.add(Physics.getFloors());
 
 	}
 

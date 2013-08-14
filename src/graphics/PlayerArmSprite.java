@@ -39,8 +39,7 @@ public class PlayerArmSprite extends Sprite {
     public static void loadImages() {
 
         idleImage = gameScreen.loadImage("../images/commandoPlayerGun.png");
-        firingImage = gameScreen
-                .loadImage("../images/commandoPlayerGunFire.png");
+        firingImage = gameScreen.loadImage("../images/commandoPlayerGunFire.png");
 
     }
 
@@ -137,6 +136,13 @@ public class PlayerArmSprite extends Sprite {
         this.yOffset = yOffset;
     }
 
+    /**
+     * A helper method to update the bullet spawn position on the player object
+     * @param angle
+     * @param rotationXOffset
+     * @param rotationYOffset
+     * @param flip
+     */
     private void updateBulletSpawnPosition(float angle,
                                            float rotationXOffset,
                                            float rotationYOffset,
@@ -149,6 +155,7 @@ public class PlayerArmSprite extends Sprite {
             bulletSpawnLocation = new PVector(125, 28);
         }
         Utils.rotatePVector2D(bulletSpawnLocation, angle);
+        System.out.println("rotationXOffset: " + rotationXOffset + " rotationYOffset: " + rotationYOffset);
         bulletSpawnLocation.set(bulletSpawnLocation.x + rotationXOffset, bulletSpawnLocation.y + rotationYOffset, 0);
         Flashback.getPlayer().setBulletSpawnPosition(bulletSpawnLocation);
         

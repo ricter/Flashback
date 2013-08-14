@@ -7,7 +7,7 @@ import physics.Physics;
 import processing.core.PApplet;
 
 public class MonsterSpawner {
-
+    
 	private PApplet gameScreen;
 	
 	private int maxAirEnemies = 10;
@@ -61,9 +61,9 @@ public class MonsterSpawner {
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
 		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
-				+ ((bias > 0) ? Flashback.xResolution + 80 : -80);
+				+ ((bias > 0) ? Flashback.X_RESOLUTION + 200 : -200);
 		float spawnPointY = gameScreen.random(0, 400);
-
+		
 		Physics.addGameEntity(new FlyingMonster(gameScreen, spawnPointX, spawnPointY,
 				Flashback.eyeSprite));
 
@@ -74,7 +74,7 @@ public class MonsterSpawner {
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
 		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
-				+ ((bias > 0) ? Flashback.xResolution + 80 : -80);
+				+ ((bias > 0) ? Flashback.X_RESOLUTION + 200 : -200);
 		float spawnPointY = gameScreen.random(0, 400);
 		//TODO Re-add ability to spawn at ground
 		/*spawnPointY = Physics.calculateNearestGroundBeneath(

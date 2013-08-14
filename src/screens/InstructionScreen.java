@@ -59,7 +59,7 @@ public class InstructionScreen {
 		gameScreen.text("Objectives", 100, 100);
 		gameScreen.text("Survive.", 100, 100+textShift);
 		
-		gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.xResolution - 100, Flashback.yResolution - 200);
+		gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.X_RESOLUTION - 100, Flashback.Y_RESOLUTION - 200);
 
 	}
 	
@@ -74,7 +74,7 @@ public class InstructionScreen {
         gameScreen.text("Left Mouse Button: Fire", 100, 100+textShift*5);
         gameScreen.text("Mouse Wheel: Adjusts heart beat by a limited amount.", 100, 100+textShift*6);
         
-        gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.xResolution - 100, Flashback.yResolution - 200);
+        gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.X_RESOLUTION - 100, Flashback.Y_RESOLUTION - 200);
 
     }
 	
@@ -89,7 +89,7 @@ public class InstructionScreen {
         gameScreen.text("As your heartbeat raises, so does your fire rate and move speed.", 100, 100+textShift*5);
         gameScreen.text("However, accuracy suffers significantly.", 100, 100+textShift*6);
         
-        gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.xResolution - 100, Flashback.yResolution - 200);
+        gameScreen.text("Use W & D or Left Arrow & Right Arrow to navigate screens.  Press Esc to resume playing!", 100, 400, Flashback.X_RESOLUTION - 100, Flashback.Y_RESOLUTION - 200);
 
     }
 

@@ -16,6 +16,7 @@ public class Physics {
 	private static ArrayList<GameObject> gameEntities = new ArrayList<GameObject>();
 	private static ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
 	private static ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
+	private static ArrayList<BoundingObject> floors = new ArrayList<BoundingObject>();
 	private static ArrayList<BoundingObject> walls = new ArrayList<BoundingObject>();
 	
 	public Physics() {
@@ -26,6 +27,10 @@ public class Physics {
 		getEnemyBullets().add(gameObj);
 	}
 
+	public static void addFloorEntity(BoundingObject gameObj) {
+        getFloors().add(gameObj);
+    }
+	
 	public static void addGameEntity(GameObject gameObj) {
 		getGameEntities().add(gameObj);
 	}
@@ -40,7 +45,7 @@ public class Physics {
 	
     public static void addWallEntity(BoundingObject gameObj) {
         getWalls().add(gameObj);
-    }	
+    }
 
 	public static CollisionType checkCollision(GameObject gameObject1, GameObject gameObject2, boolean flipImage1, boolean flipImage2){
 	    
@@ -58,9 +63,9 @@ public class Physics {
         bottom1 = gameObject1.getyPosition() + gameObject1.getSprite().getCollisionYOffset() + gameObject1.getSprite().getCollisionHeight();
         bottom2 = gameObject2.getyPosition() + gameObject2.getSprite().getCollisionYOffset() + gameObject2.getSprite().getCollisionHeight();
 
-        if (gameObject2.getSprite().getCollisionWidth()==20 && left1 < 220){
+        /*if (gameObject2.getSprite().getCollisionWidth()==20 && left1 < 220){
             System.out.println(left1);
-        }
+        }*/
         
         /*if (flipImage1) {
             left1 += gameObject1.getSprite().getCollisionWidth();
@@ -110,6 +115,10 @@ public class Physics {
 		return enemyBullets;
 	}
 
+	public static ArrayList<BoundingObject> getFloors() {
+        return floors;
+    }
+	
 	public static ArrayList<GameObject> getGameEntities() {
         return gameEntities;
     }

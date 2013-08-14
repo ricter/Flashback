@@ -44,12 +44,12 @@ public class Monster extends GameObject {
 
             fireTimer = gameScreen.random(minFireRate, maxFireRate);
 
-            Physics.addEnemyBullet(new Bullet(gameScreen,
-                                              getxPosition(),
-                                              yPosition,
-                                              Flashback.bulletSprite,
-                                              Physics.getPlayerEntities().get(0).getxPosition(),
-                                              Physics.getPlayerEntities().get(0).yPosition));
+            Physics.addEnemyBullet(new EnemyBullet(gameScreen,
+                                                   getxPosition(),
+                                                   yPosition,
+                                                   Flashback.bulletSprite,
+                                                   Physics.getPlayerEntities().get(0).getxPosition(),
+                                                   Physics.getPlayerEntities().get(0).yPosition));
 
         } else fireTimer -= deltaT;
         

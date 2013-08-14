@@ -52,15 +52,15 @@ public class LevelData {
 		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
 
 			for (int xPosition = 0; xPosition < (int) Utils
-					.scaleXPosition((float) Flashback.xResolution); xPosition++) {
+					.scaleXPosition((float) Flashback.X_RESOLUTION); xPosition++) {
 
 				float leftGroundPointX = xPosition * Utils.scaleXValue;
-				float leftGroundPointY = Flashback.yResolution
+				float leftGroundPointY = Flashback.Y_RESOLUTION
 						- groundHeights.get(levelNumber).get(
 								xPosition + scaledX);
 				float rightGroundPointX = xPosition * Utils.scaleXValue
 						+ Utils.scaleXValue;
-				float rightGroundPointY = Flashback.yResolution
+				float rightGroundPointY = Flashback.Y_RESOLUTION
 						- groundHeights.get(levelNumber).get(
 								xPosition + scaledX + 1);
 
@@ -106,6 +106,7 @@ public class LevelData {
 	} // end getGround
 	
 	private void loadLevel() {
+	    
 		try {
 			Object raw = parser.parse(new FileReader("../levels/level1.json"));
 			level = (JSONObject)raw; 
@@ -157,16 +158,7 @@ public class LevelData {
 		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
 		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
 		
-		BoundingSprite floorSprite = new BoundingSprite(true);
-		BoundingObject floor = new BoundingObject(gameScreen, 0, Flashback.yResolution, floorSprite);
-        Physics.addWallEntity(floor);
-        
-        BoundingSprite leftWallSprite = new BoundingSprite();
-        BoundingObject leftWall = new BoundingObject(gameScreen, 0, 0, leftWallSprite);
-        Physics.addWallEntity(leftWall);
-        
-        BoundingObject rightWall = new BoundingObject(gameScreen, Flashback.xResolution, 0, new BoundingSprite());
-        Physics.addWallEntity(rightWall);
+		createDefaultFloorsAndWalls();
 
 		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
 
@@ -257,6 +249,21 @@ public class LevelData {
 			}
 		}
 	}
+
+    public void createDefaultFloorsAndWalls() {
+        
+        BoundingSprite floorSprite = new BoundingSprite(true);
+		BoundingObject floor = new BoundingObject(gameScreen, -300, Flashback.Y_RESOLUTION, floorSprite);
+        Physics.addFloorEntity(floor);
+        
+        BoundingSprite leftWallSprite = new BoundingSprite();
+        BoundingObject leftWall = new BoundingObject(gameScreen, 0, 0, leftWallSprite);
+        Physics.addWallEntity(leftWall);
+        
+        BoundingObject rightWall = new BoundingObject(gameScreen, Flashback.LEVEL_X_WIDTH, 0, new BoundingSprite());
+        Physics.addWallEntity(rightWall);
+        
+    }
 
 	public float getLevelWidthPixels() {
 		return levelWidthPixels;

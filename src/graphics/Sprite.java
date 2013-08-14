@@ -66,7 +66,6 @@ public abstract class Sprite {
             if (imageNumber == getMovingImages().size()){
                 imageNumber = 0;
             }
-            System.out.println(imageNumber);
             currentImage = getMovingImages().get(imageNumber);
         }
         

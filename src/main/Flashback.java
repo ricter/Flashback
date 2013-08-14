@@ -1,13 +1,13 @@
 package main;
 
 import gameObjects.Player;
+import graphics.BoundingSprite;
 import graphics.BulletSprite;
 import graphics.EyeSprite;
 import graphics.PlayerArmSprite;
 import graphics.PlayerSprite;
 import graphics.Renderer;
 import graphics.Sprite;
-import graphics.BoundingSprite;
 import graphics.ZombieSprite;
 
 import java.awt.event.MouseWheelEvent;
@@ -29,10 +29,11 @@ import ddf.minim.Minim;
 
 public class Flashback extends PApplet {
 
-	public final static int xResolution = 1280;
-	public final static int yResolution = 720;
-	public final static float ground = 40;
-	public final static int baseFrameRate = 60;
+    public final static int LEVEL_X_WIDTH = 8000;
+	public final static int X_RESOLUTION = 1280;
+	public final static int Y_RESOLUTION = 720;
+	public final static float GROUND = 40;
+	public final static int BASE_FRAME_RATE = 60;
 
 	public static Player player;
 	public static LevelData levelData;
@@ -80,7 +81,7 @@ public class Flashback extends PApplet {
 	 */
 	public void addPlayerToStart() {
 
-		player = new Player(this, xResolution / 2, yResolution / 2, playerSprite, playerArmSprite);
+		player = new Player(this, X_RESOLUTION / 2, Y_RESOLUTION / 2, playerSprite, playerArmSprite);
 		Physics.addPlayerEntity(player);
 
 	}
@@ -115,15 +116,15 @@ public class Flashback extends PApplet {
 			instructionScreen.drawInstructionScreen();
 		} else {
 
-			monsterSpawner.update(1 / (float) baseFrameRate);
-			Physics.updateGameObjects(1 / (float) baseFrameRate);
+			monsterSpawner.update(1 / (float) BASE_FRAME_RATE);
+			Physics.updateGameObjects(1 / (float) BASE_FRAME_RATE);
 
 			renderer.drawGameObjects();
 			
 			if (instructionTextAlpha > 0){
 			    fill(255, 255, 255, (float)instructionTextAlpha);
 	            instructionTextAlpha = instructionTextAlpha - .25;
-	            text("i: instructions", xResolution - 250, 40);
+	            text("i: instructions", X_RESOLUTION - 250, 40);
 			}
 
 		}
@@ -269,6 +270,7 @@ public class Flashback extends PApplet {
 
 				clearGameObjectArrays();
 				addPlayerToStart();
+				levelData.createDefaultFloorsAndWalls();
 				loseScreen.setLoseScreenActive(false);
 
 			}
@@ -331,7 +333,7 @@ public class Flashback extends PApplet {
 		loadMusic();
 
 		size(1280, 720, P2D);
-		frameRate(baseFrameRate);
+		frameRate(BASE_FRAME_RATE);
 		background(backgroundColor);
 		smooth();
 

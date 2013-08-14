@@ -43,7 +43,7 @@ public class GameObject {
 
 		this.gameScreen = gameScreen;
 		setXPosition(x);
-		yPosition = y;
+		setYPosition(y);
 		this.sprite = sprite;
 
 	}
@@ -56,7 +56,11 @@ public class GameObject {
 
     public void computeVelocity(float deltaT){
         
-        xVelocity += xAcceleration * (deltaT);
+        if ( (xAcceleration < 0 && xVelocity > 0) || (xAcceleration > 0 && xVelocity < 0) ){ // check if direction of movement is different than desired direction of movement
+            xVelocity = 0;  // allow instant turns
+        } else xVelocity += xAcceleration * (deltaT);
+        
+        
         if (isAffectedByGravity){
             yAcceleration += Physics.GRAVITY_ACCELERATION;  
         }
@@ -68,9 +72,6 @@ public class GameObject {
         xVelocity = (xVelocity < -maxXVelocity) ? -maxXVelocity : xVelocity;
         yVelocity = (yVelocity > maxYVelocity) ? maxYVelocity : yVelocity;
         yVelocity = (yVelocity < -maxYVelocity) ? -maxYVelocity : yVelocity;
-        
-        //System.out.println("xAcceleration: " + xAcceleration + " yAcceleration: " + yAcceleration);
-        //System.out.println("xVelocity: " + xVelocity + " yVelocity " + yVelocity);
         
 	}
 
@@ -171,18 +172,18 @@ public class GameObject {
 	                
 	                case XANDY:
 	                    
-	                    triggerXCollision(oldX);
-	                    triggerYCollision(oldY);
+	                    triggerXCollision(oldX, gameObject);
+	                    triggerYCollision(oldY, gameObject);
 	                    break;
 	                
 	                case X:
 	                    
-	                    triggerXCollision(oldX);
+	                    triggerXCollision(oldX, gameObject);
 	                    break;
 	                    
 	                case Y:
 	                    
-	                    triggerYCollision(oldY);
+	                    triggerYCollision(oldY, gameObject);
 	                    break;
 	                
 	                    // all other cases do nothing
@@ -194,7 +195,7 @@ public class GameObject {
 	    
 	}
 	
-	public void triggerXCollision(float oldX){
+	public void triggerXCollision(float oldX, GameObject gameObject){
 	    
 	    xVelocity = 0;
         xAcceleration = 0;
@@ -202,7 +203,7 @@ public class GameObject {
 	    
 	}
 	
-	public void triggerYCollision(float oldY){
+	public void triggerYCollision(float oldY, GameObject gameObject){
         
 	    yVelocity = 0;
         yAcceleration = 0;
