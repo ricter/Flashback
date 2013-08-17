@@ -8,8 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import main.Flashback;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -72,7 +72,7 @@ public class LevelData {
 				HashMap<String, Object> tileDef = new HashMap<String, Object>();
 				tileDef.put("gid", Integer.valueOf(tile.get("firstgid").toString()));
 				tileDef.put("image", tile.get("image").toString());
-				tileDef.put("props", tile.get("properties"));
+				tileDef.put("props", tile.get("tileproperties"));
 				
 				levelTileDefs.add(tileDef);
 			}
@@ -92,10 +92,23 @@ public class LevelData {
 							else {
 								tileXPos = levelTileWidth * k;
 								tileYPos = levelTileHeight * j;
-								BoundingSprite floorSprite = new BoundingSprite(true);
-								BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
-						        Physics.addFloorEntity(floor);
-						        renderedTiles++;
+								Long tileIdx = tmpLevelData.get((int)((j*levelWidth2)+k));
+								JSONObject tmp = (JSONObject)levelTileDefs.get(tileIdx.intValue()-1).get("props");
+								Iterator it = tmp.entrySet().iterator();
+								while (it.hasNext()){
+									Map.Entry pairs = (Map.Entry)it.next();
+									JSONObject eachProp = (JSONObject)pairs.getValue();
+									if ((boolean)eachProp.get("floor").equals("true")) {
+										BoundingSprite floorSprite = new BoundingSprite(true);
+										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+								        Physics.addFloorEntity(floor);
+									} else if ((boolean)eachProp.get("wall").equals("true"))
+									{
+										BoundingSprite floorSprite = new BoundingSprite(false);
+										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+								        Physics.addFloorEntity(floor);
+									}
+								}
 							} // end if
 						} // end for
 					} // end for
@@ -108,8 +121,6 @@ public class LevelData {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} // end try
-		
-		System.out.println(renderedTiles);
 	}
 
 	public float getLevelWidthPixels() {
