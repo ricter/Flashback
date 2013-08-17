@@ -26,6 +26,11 @@ public class Renderer {
                     -Flashback.levelData.getxDistanceFromLeftWall(), 0);
         }
 		
+		for (int index = 0; index < Physics.getFloors().size(); index++) {
+            Physics.getFloors().get(index).draw(
+                    -Flashback.levelData.getxDistanceFromLeftWall(), 0);
+        }
+		
 		for (int index = 0; index < Physics.getGameEntities().size(); index++) {
 			Physics.getGameEntities().get(index).draw(
 					-Flashback.levelData.getxDistanceFromLeftWall(), 0);

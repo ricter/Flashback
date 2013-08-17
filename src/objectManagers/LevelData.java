@@ -28,13 +28,13 @@ public class LevelData {
 	private JSONObject level;
 	private JSONArray levelLayers, levelTilesets;
 	
-	private Integer levelHeight;
-	private Integer levelWidth2;
-	private Integer levelTileHeight;
-	private Integer levelTileWidth;
+	// Not sure why this have to be longs, but Java does't like it if they're not
+	private Long levelHeight;
+	private Long levelWidth2;
+	private Long levelTileHeight;
+	private Long levelTileWidth;
 	private ArrayList<HashMap<String, Object>> levelTileDefs = new ArrayList<HashMap<String, Object>>();
 	
-	private ArrayList<ArrayList<Float>> groundHeights;
 	private int xDistanceFromLeftWall = 0;
 	private int levelWidth = 800;
 	private float levelWidthPixels = (float) getLevelWidth() * Utils.scaleXValue;
@@ -48,78 +48,26 @@ public class LevelData {
 
 		gameScreen.strokeWeight(4);
 		gameScreen.stroke(0);
-		int scaledX = (int) Utils.scaleXPosition((float) x);
-		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
-
-			for (int xPosition = 0; xPosition < (int) Utils
-					.scaleXPosition((float) Flashback.X_RESOLUTION); xPosition++) {
-
-				float leftGroundPointX = xPosition * Utils.scaleXValue;
-				float leftGroundPointY = Flashback.Y_RESOLUTION
-						- groundHeights.get(levelNumber).get(
-								xPosition + scaledX);
-				float rightGroundPointX = xPosition * Utils.scaleXValue
-						+ Utils.scaleXValue;
-				float rightGroundPointY = Flashback.Y_RESOLUTION
-						- groundHeights.get(levelNumber).get(
-								xPosition + scaledX + 1);
-
-				if (leftGroundPointY == rightGroundPointY) {
-					gameScreen.line(leftGroundPointX, leftGroundPointY, rightGroundPointX,
-							rightGroundPointY);
-				} // end if
-
-			} // end for
-
-		} // end for
 
 	} // end draw
 
-	public float[] getGround(float xPos) {
-
-		if (xPos < 1) {
-
-			float[] ground = new float[1];
-			ground[0] = 0;
-			return ground;
-
-		} else if (xPos > Flashback.levelData.getLevelWidthPixels()) {
-
-			float[] ground = new float[1];
-			ground[0] = 0;
-			return ground;
-
-		} // end else/if
-
-		float[] ground = new float[groundHeights.size()];
-		float scaledxPos = Utils.scaleXPosition(xPos);
-		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
-
-			float yPos0 = groundHeights.get(levelNumber).get((int) scaledxPos);
-			float yPos1 = groundHeights.get(levelNumber).get(
-					(int) scaledxPos + 1);
-			ground[levelNumber] = Utils.interpolateYPosition(xPos, yPos0, yPos1);
-
-		} // end for
-		return ground;
-
-	} // end getGround
-	
-	private void loadLevel() {
+	public void loadLevel() {
 	    
+		int renderedTiles = 0;
+		
 		try {
 			Object raw = parser.parse(new FileReader("../levels/level1.json"));
 			level = (JSONObject)raw; 
 			
-			levelHeight = (Integer)level.get("height");
-			levelWidth2 = (Integer)level.get("width");
-			levelTileHeight = (Integer)level.get("tileheight");
-			levelTileWidth = (Integer)level.get("tilewidth");
+			levelTileHeight = (Long)level.get("tileheight");
+			levelTileWidth = (Long)level.get("tilewidth");
+			levelHeight = (Long)level.get("height");
+			levelWidth2 = (Long)level.get("width");
 			
 			levelLayers = (JSONArray)level.get("layers");
 			levelTilesets = (JSONArray)level.get("tilesets");
 			
-			for(int i = 0; i < levelTilesets.size(); i++) {
+			for(int i = 1; i <= levelTilesets.size(); i++) {
 				JSONObject tile = (JSONObject)levelTilesets.get(i - 1);
 				HashMap<String, Object> tileDef = new HashMap<String, Object>();
 				tileDef.put("gid", Integer.valueOf(tile.get("firstgid").toString()));
@@ -130,140 +78,39 @@ public class LevelData {
 			}
 			
 			// Iterate through layers
-			for(int i = 0; i < levelLayers.size(); i++) {
+			for(int i = 1; i <= levelLayers.size(); i++) {
 				JSONObject levelLayer = (JSONObject)levelLayers.get(i - 1);
+				long tileXPos = 0;
+				long tileYPos = 0;
 				
-				if(levelLayer.get("name") == "collision") {
-					// Iterate through level data and draw collision boxes
-					// at every non-0 area
-				}
-				else if(levelLayer.get("visible") == "true") {
-					// Iterate through level data and draw images at
-					// every non-0 area using the tile definitions
-				}
-			}
+				if((Boolean) levelLayer.get("visible")) {
+					ArrayList<Long> tmpLevelData = (ArrayList<Long>) levelLayer.get("data");
+					
+					for(int j = 0; j < levelHeight; j++) {
+						for(int k = 0; k < levelWidth2; k++) {
+							if(tmpLevelData.get((int)((j*levelWidth2)+k)) == 0) continue;
+							else {
+								tileXPos = levelTileWidth * k;
+								tileYPos = levelTileHeight * j;
+								BoundingSprite floorSprite = new BoundingSprite(true);
+								BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+						        Physics.addFloorEntity(floor);
+						        renderedTiles++;
+							} // end if
+						} // end for
+					} // end for
+				} // end if
+			} // end for
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}
-	}
-
-	// Creates the platforms, find a better way to do this
-	public  void createLevelOneGroundHeights() {
-
-		groundHeights = new ArrayList<ArrayList<Float>>(2);
-		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
-		groundHeights.add(new ArrayList<Float>(getLevelWidth()));
+		} // end try
 		
-		createDefaultFloorsAndWalls();
-
-		for (int levelNumber = 0; levelNumber < groundHeights.size(); levelNumber++) {
-
-			for (int xPosition = 0; xPosition < getLevelWidth(); xPosition++) {
-
-				if (levelNumber == 0) {
-
-					if (xPosition > 700) {
-
-						groundHeights.get(levelNumber).add(80f);
-
-					} else if (xPosition > 600) {
-
-						groundHeights.get(levelNumber).add(125f);
-
-					} else if (xPosition > 520) {
-
-						groundHeights.get(levelNumber).add(150f);
-
-					} else if (xPosition > 470) {
-
-						groundHeights.get(levelNumber).add(100f);
-
-					} else if (xPosition > 400) {
-
-						groundHeights.get(levelNumber).add(80f);
-
-					} else if (xPosition > 300) {
-
-						groundHeights.get(levelNumber).add(40f);
-
-					} else if (xPosition > 240) {
-
-						groundHeights.get(levelNumber).add(80f);
-
-					} else if (xPosition > 160) {
-
-						groundHeights.get(levelNumber).add(40f);
-
-					} else if (xPosition > 80) {
-
-						groundHeights.get(levelNumber).add(80f);
-
-					} else
-						groundHeights.get(levelNumber).add(40f);
-
-				} else { // (levelNumber == 1) {
-					if (xPosition > 750) {
-
-						groundHeights.get(levelNumber).add(250f);
-
-					} else if (xPosition > 630) {
-
-						groundHeights.get(levelNumber).add(275f);
-
-					} else if (xPosition > 610) {
-
-						groundHeights.get(levelNumber).add(240f);
-
-					} else if (xPosition > 450) {
-
-						groundHeights.get(levelNumber).add(220f);
-
-					} else if (xPosition > 400) {
-
-						groundHeights.get(levelNumber).add(170f);
-
-					} else if (xPosition > 300) {
-
-						groundHeights.get(levelNumber).add(245f);
-
-					} else if (xPosition > 240) {
-
-						groundHeights.get(levelNumber).add(240f);
-
-					} else if (xPosition > 160) {
-
-						groundHeights.get(levelNumber).add(220f);
-
-					} else if (xPosition > 80) {
-
-						groundHeights.get(levelNumber).add(200f);
-
-					} else
-						groundHeights.get(levelNumber).add(160f);
-
-				}
-			}
-		}
+		System.out.println(renderedTiles);
 	}
-
-    public void createDefaultFloorsAndWalls() {
-        
-        BoundingSprite floorSprite = new BoundingSprite(true);
-		BoundingObject floor = new BoundingObject(gameScreen, -300, Flashback.Y_RESOLUTION, floorSprite);
-        Physics.addFloorEntity(floor);
-        
-        BoundingSprite leftWallSprite = new BoundingSprite();
-        BoundingObject leftWall = new BoundingObject(gameScreen, 0, 0, leftWallSprite);
-        Physics.addWallEntity(leftWall);
-        
-        BoundingObject rightWall = new BoundingObject(gameScreen, Flashback.LEVEL_X_WIDTH, 0, new BoundingSprite());
-        Physics.addWallEntity(rightWall);
-        
-    }
 
 	public float getLevelWidthPixels() {
 		return levelWidthPixels;

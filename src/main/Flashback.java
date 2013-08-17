@@ -270,7 +270,7 @@ public class Flashback extends PApplet {
 
 				clearGameObjectArrays();
 				addPlayerToStart();
-				levelData.createDefaultFloorsAndWalls();
+				levelData.loadLevel();
 				loseScreen.setLoseScreenActive(false);
 
 			}
@@ -355,7 +355,6 @@ public class Flashback extends PApplet {
 		addPlayerToStart();
 
 		levelData = new LevelData(this);
-		levelData.createLevelOneGroundHeights();
 
 		camera = new Camera();
 		renderer = new Renderer(this);
