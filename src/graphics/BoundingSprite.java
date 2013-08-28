@@ -9,16 +9,30 @@ public class BoundingSprite extends Sprite {
     static PImage floorImage;
     static PImage wallImage;
     
-    boolean isFloor;
+    private ArrayList<String> loadedImages = new ArrayList<String>();
+    private ArrayList<PImage> loadedPImages = new ArrayList<PImage>();
     
-    public BoundingSprite() {
-        super(wallImage);
-        this.isFloor = false;
-    }
+    boolean isFloor;
 
-    public BoundingSprite(boolean isFloor) {
-        super(floorImage);
+    // TO DO - Fix this. Legacy code. Need tmp images so that
+    // the collision bounding box is set correctly. Doesn't seem
+    // to be a way to set it from here.
+    public BoundingSprite(boolean isFloor, String spritePath) {
+    	super(floorImage);
+    	this.tryLoadImage(spritePath);
         this.isFloor = isFloor;
+    }
+    
+    private void tryLoadImage(String path)
+    {
+    	if (loadedImages.contains(path)) {
+    		this.currentImage = loadedPImages.get(loadedImages.indexOf(path));
+    	} else {
+    		PImage newFloorImage = gameScreen.loadImage(path);
+    		loadedImages.add(path);
+    		loadedPImages.add(newFloorImage);
+    		this.currentImage = newFloorImage;
+    	}
     }
     
     public static void loadImages(){

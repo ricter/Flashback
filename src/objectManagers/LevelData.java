@@ -52,8 +52,6 @@ public class LevelData {
 	} // end draw
 
 	public void loadLevel() {
-	    
-		int renderedTiles = 0;
 		
 		try {
 			Object raw = parser.parse(new FileReader("../levels/level1.json"));
@@ -94,17 +92,19 @@ public class LevelData {
 								tileYPos = levelTileHeight * j;
 								Long tileIdx = tmpLevelData.get((int)((j*levelWidth2)+k));
 								JSONObject tmp = (JSONObject)levelTileDefs.get(tileIdx.intValue()-1).get("props");
+								String imagePath = (String)levelTileDefs.get(tileIdx.intValue()-1).get("image");
+								
 								Iterator it = tmp.entrySet().iterator();
 								while (it.hasNext()){
 									Map.Entry pairs = (Map.Entry)it.next();
 									JSONObject eachProp = (JSONObject)pairs.getValue();
+									
 									if ((boolean)eachProp.get("floor").equals("true")) {
-										BoundingSprite floorSprite = new BoundingSprite(true);
+										BoundingSprite floorSprite = new BoundingSprite(true, imagePath);
 										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
 								        Physics.addFloorEntity(floor);
-									} else if ((boolean)eachProp.get("wall").equals("true"))
-									{
-										BoundingSprite floorSprite = new BoundingSprite(false);
+									} else if ((boolean)eachProp.get("wall").equals("true")) {
+										BoundingSprite floorSprite = new BoundingSprite(false, imagePath);
 										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
 								        Physics.addFloorEntity(floor);
 									}
