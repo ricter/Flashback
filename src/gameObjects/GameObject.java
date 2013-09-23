@@ -9,28 +9,28 @@ import processing.core.PApplet;
 
 public class GameObject {
 
+	protected boolean flipImage;
+	
 	protected PApplet gameScreen;
 	
+	protected boolean isAffectedByGravity = true;
 	protected ArrayList<ArrayList<? extends GameObject>> listOfCollideableObjects;
+	protected float maxManualXAcceleration;
+    protected float maxXVelocity = 2000;
+    protected float maxYVelocity = 2000;
+	protected float oldXPosition;
+	protected float oldYPosition;
+	protected boolean removeMe = false;
+	protected Sprite sprite;
 	
+	protected float xAcceleration;
 	protected float xPosition;
 	protected float xVelocity;
-	protected float xAcceleration;
+	protected float yAcceleration;
 	protected float yPosition;
 	protected float yVelocity;
-	protected float yAcceleration;
 	
-	protected float maxManualXAcceleration;
-	protected float maxYVelocity = 2000;
-	protected float maxXVelocity = 2000;
-	protected boolean isAffectedByGravity = true;
-	
-	protected Sprite sprite;
-	protected boolean flipImage;
-
-    protected boolean removeMe = false;
-
-    public GameObject(PApplet gameScreen) {
+	public GameObject(PApplet gameScreen) {
 
 		this.gameScreen = gameScreen;
 		setXPosition(0);
@@ -82,6 +82,14 @@ public class GameObject {
 		}
 
 	}
+
+    public float getOldXPosition() {
+        return oldXPosition;
+    }
+
+    public float getOldYPosition() {
+        return oldYPosition;
+    }
 
     public Sprite getSprite() {
         return sprite;
@@ -151,49 +159,15 @@ public class GameObject {
 		return removeMe;
 	}
 
-	/** Should never be called directly, should be overloaded by any children */
-	public void update(float deltaT) {
-	    
-	}
+	public boolean skipXCollision() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 	
-	public void updateMovement(float deltaT){
-	    
-	    // try to move
-	    float oldX = xPosition;
-	    float oldY = yPosition;
-	    xPosition += xVelocity * deltaT;
-        yPosition += yVelocity * deltaT;
-	    
-	    for (ArrayList<? extends GameObject> list : listOfCollideableObjects){
-	        
-	        for (GameObject gameObject : list){
-	            
-	            switch (Physics.checkCollision(this, gameObject, flipImage, gameObject.flipImage)){
-	                
-	                case XANDY:
-	                    
-	                    triggerXCollision(oldX, gameObject);
-	                    triggerYCollision(oldY, gameObject);
-	                    break;
-	                
-	                case X:
-	                    
-	                    triggerXCollision(oldX, gameObject);
-	                    break;
-	                    
-	                case Y:
-	                    
-	                    triggerYCollision(oldY, gameObject);
-	                    break;
-	                
-	                    // all other cases do nothing
-	            }
-	            
-	        }
-	        
-	    }
-	    
-	}
+	public boolean skipYCollision() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 	
 	public void triggerXCollision(float oldX, GameObject gameObject){
 	    
@@ -211,14 +185,48 @@ public class GameObject {
         
     }
 
-    public boolean skipXCollision() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    /** Should never be called directly, should be overloaded by any children */
+	public void update(float deltaT) {
+	    
+	}
 
-    public boolean skipYCollision() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public void updateMovement(float deltaT){
+	    
+	    // try to move
+	    oldXPosition = xPosition;
+	    oldYPosition = yPosition;
+	    xPosition += xVelocity * deltaT;
+        yPosition += yVelocity * deltaT;
+	    
+	    for (ArrayList<? extends GameObject> list : listOfCollideableObjects){
+	        
+	        for (GameObject gameObject : list){
+	            
+	            switch (Physics.checkCollision(this, gameObject, flipImage, gameObject.flipImage)){
+	                
+	                case XANDY:
+	                    
+	                    triggerXCollision(oldXPosition, gameObject);
+	                    triggerYCollision(oldYPosition, gameObject);
+	                    break;
+	                
+	                case X:
+	                    
+	                    triggerXCollision(oldXPosition, gameObject);
+	                    break;
+	                    
+	                case Y:
+	                    
+	                    triggerYCollision(oldYPosition, gameObject);
+	                    break;
+	                
+	                    // all other cases do nothing
+	            }
+	            
+	        }
+	        
+	    }
+	    
+	}
 	
 }

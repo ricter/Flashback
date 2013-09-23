@@ -7,6 +7,9 @@ import graphics.Sprite;
 import java.util.ArrayList;
 
 import main.Flashback;
+
+import org.apache.log4j.Logger;
+
 import physics.Physics;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -29,7 +32,7 @@ public class Player extends GameObject {
 
     private double startingBPS = 1.0;
     private double currentBaseBPS = startingBPS;
-    private double heartbeatTimer = 2; // 2.0
+    private double heartbeatTimer = 2;
     private double maxBPS = 4.0;
     private double minBPS = 0.20;
     private double manualHeartRateAdjustment = 0.0;
@@ -40,6 +43,8 @@ public class Player extends GameObject {
     private PVector bulletSpawnPosition;
 
     private Scorecard scorecard;
+    
+    final static Logger logger = Logger.getLogger(Player.class);
 
     public Player(PApplet gameScreen, float x, float y, Sprite sprite, PlayerArmSprite armSprite) {
 
@@ -101,7 +106,10 @@ public class Player extends GameObject {
 
         Flashback.hit.rewind();
         Flashback.hit.play();
-        damageHeartRateAdjustment -= .125;
+        /**
+         * ADJUST MONSTER DAMAGE PER HIT HERE
+         */
+        damageHeartRateAdjustment -= .125; // .125 is current "standard"
 
     }
 
@@ -247,8 +255,9 @@ public class Player extends GameObject {
     }
 
     private void tryToJump(float deltaT) {
-
+        
         if (hasLanded && yVelocity < .5) {
+            if(logger.isDebugEnabled()) logger.debug("Player is able to jump.  Jumping...");
             yAcceleration = -1750;
             hasLanded = false;
         }

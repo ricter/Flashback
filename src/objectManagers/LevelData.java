@@ -54,7 +54,7 @@ public class LevelData {
 	public void loadLevel() {
 		
 		try {
-			Object raw = parser.parse(new FileReader("../levels/level1.json"));
+			Object raw = parser.parse(new FileReader("levels/level1.json"));
 			level = (JSONObject)raw; 
 			
 			levelTileHeight = (Long)level.get("tileheight");

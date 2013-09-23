@@ -16,6 +16,9 @@ import java.awt.event.MouseWheelListener;
 import objectManagers.Camera;
 import objectManagers.LevelData;
 import objectManagers.MonsterSpawner;
+
+import org.apache.log4j.Logger;
+
 import physics.Physics;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -65,6 +68,8 @@ public class Flashback extends PApplet {
 	
 	private static double instructionTextAlpha = 100;
 	private static boolean loaded = false;
+	
+	private static Logger logger = Logger.getLogger(Flashback.class);
 
 	/**
 	 * Main driver to kick off the program.
@@ -72,8 +77,8 @@ public class Flashback extends PApplet {
 	 */
 	public static void main(String[] args) {
 		
-		PApplet.main(new String[] { "--present", "main.Flashback" });
-		
+	    PApplet.main(new String[] { "--present", "main.Flashback" });
+        
 	}
 
 	/**

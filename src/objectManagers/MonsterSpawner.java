@@ -41,7 +41,7 @@ public class MonsterSpawner {
 
 			curAirSpawnRate = gameScreen.random(minAirSpawnRate, maxAirSpawnRate);
 			airSpawnTimer = 0;
-			spawnAirEnemy();
+			//spawnAirEnemy();
 
 		}
 
@@ -50,7 +50,7 @@ public class MonsterSpawner {
 
 			curGroundSpawnRate = gameScreen.random(minGroundSpawnRate, maxGroundSpawnRate);
 			groundSpawnTimer = 0;
-			spawnGroundEnemy();
+			//spawnGroundEnemy();
 
 		}
 

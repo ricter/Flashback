@@ -8,6 +8,8 @@ import gameObjects.Player;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class Physics {
 
     public static final double GRAVITY_ACCELERATION = 70;
@@ -18,6 +20,8 @@ public class Physics {
 	private static ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
 	private static ArrayList<BoundingObject> floors = new ArrayList<BoundingObject>();
 	private static ArrayList<BoundingObject> walls = new ArrayList<BoundingObject>();
+	
+	final static Logger logger = Logger.getLogger(Player.class);
 	
 	public Physics() {
 
@@ -47,20 +51,36 @@ public class Physics {
         getWalls().add(gameObj);
     }
 
+    /**
+     * NOTE: This will ignore collisions if the objects were previously collided (such as by forced movement that never checked for collisions).
+     * @param gameObject1
+     * @param gameObject2
+     * @param flipImage1
+     * @param flipImage2
+     * @return
+     */
 	public static CollisionType checkCollision(GameObject gameObject1, GameObject gameObject2, boolean flipImage1, boolean flipImage2){
 	    
 	    float left1, left2;
         float right1, right2;
         float top1, top2;
         float bottom1, bottom2;
+        float oldLeft1, oldRight1, oldTop1, oldBottom1;
 
         left1 = gameObject1.getxPosition() + gameObject1.getSprite().getCollisionXOffset();
+        oldLeft1 = gameObject1.getOldXPosition() + gameObject1.getSprite().getCollisionXOffset();
         left2 = gameObject2.getxPosition() + gameObject2.getSprite().getCollisionXOffset();
+        
         right1 = gameObject1.getxPosition() + gameObject1.getSprite().getCollisionXOffset() + gameObject1.getSprite().getCollisionWidth();
+        oldRight1 = gameObject1.getOldXPosition() + gameObject1.getSprite().getCollisionXOffset() + gameObject1.getSprite().getCollisionWidth();
         right2 = gameObject2.getxPosition() + gameObject2.getSprite().getCollisionXOffset() + gameObject2.getSprite().getCollisionWidth();
+        
         top1 = gameObject1.getyPosition() + gameObject1.getSprite().getCollisionYOffset();
+        oldTop1 = gameObject1.getOldYPosition() + gameObject1.getSprite().getCollisionYOffset();
         top2 = gameObject2.getyPosition() + gameObject2.getSprite().getCollisionYOffset();
+        
         bottom1 = gameObject1.getyPosition() + gameObject1.getSprite().getCollisionYOffset() + gameObject1.getSprite().getCollisionHeight();
+        oldBottom1 = gameObject1.getOldYPosition() + gameObject1.getSprite().getCollisionYOffset() + gameObject1.getSprite().getCollisionHeight();
         bottom2 = gameObject2.getyPosition() + gameObject2.getSprite().getCollisionYOffset() + gameObject2.getSprite().getCollisionHeight();
 
         /*if (gameObject2.getSprite().getCollisionWidth()==20 && left1 < 220){
@@ -79,7 +99,20 @@ public class Physics {
 	    
         boolean skipXCheck = gameObject1.skipXCollision() || gameObject2.skipXCollision();
         boolean skipYCheck = gameObject1.skipYCollision() || gameObject2.skipYCollision();
-	    return checkOverlap(left1, bottom1, right1, top1, left2, bottom2, right2, top2, skipXCheck, skipYCheck);
+        
+        CollisionType collision = CollisionType.NONE;
+        // this makes sure the objects aren't currently colliding before checking for a collision and causing weird behavior
+        if (checkOverlap(oldLeft1, oldBottom1, oldRight1, oldTop1, left2, bottom2, right2, top2, skipXCheck, skipYCheck) == CollisionType.NONE){ 
+            
+            collision = checkOverlap(left1, bottom1, right1, top1, left2, bottom2, right2, top2, skipXCheck, skipYCheck); 
+            
+        } else {
+            
+            //if(logger.isDebugEnabled()) logger.debug("Objects " + gameObject1.toString() + " and " + gameObject2.toString() + " were previously colliding.  Not checking for new collision.");
+            
+        }
+        
+	    return collision;
 	    
 	}
 	
