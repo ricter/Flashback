@@ -57,12 +57,9 @@ public class LevelData {
 	public void loadLevel() {
 		
 		try {
-<<<<<<< HEAD
 		    
 		    if(logger.isInfoEnabled()) logger.info("Loading level one...");
-=======
-			// Get the Level JSON file and cast it to a JSONObject
->>>>>>> 7182d4e013a6c3c092d4f51215b991daf8f57d01
+
 			Object raw = parser.parse(new FileReader("levels/level1.json"));
 			level = (JSONObject)raw; 
 			
