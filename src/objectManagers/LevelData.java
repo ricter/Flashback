@@ -55,7 +55,8 @@ public class LevelData {
 		
 		try {
 			// Get the Level JSON file and cast it to a JSONObject
-			Object raw = parser.parse(new FileReader("levels/level1.json"));
+			String path = "../levels/level1.json";
+			Object raw = parser.parse(new FileReader(path));
 			level = (JSONObject)raw; 
 			
 			// Extract high-level level data from JSON
@@ -128,14 +129,19 @@ public class LevelData {
 									Map.Entry pairs = (Map.Entry)it.next();
 									JSONObject eachProp = (JSONObject)pairs.getValue();
 									
-									if ((boolean)eachProp.get("floor").equals("true")) {
-										BoundingSprite floorSprite = new BoundingSprite(true, imagePath);
-										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
-								        Physics.addFloorEntity(floor);
-									} else if ((boolean)eachProp.get("wall").equals("true")) {
-										BoundingSprite floorSprite = new BoundingSprite(false, imagePath);
-										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
-								        Physics.addFloorEntity(floor);
+									if (!(eachProp.get("floor") == null)) {
+										if ((boolean)eachProp.get("floor").equals("true")) {
+											BoundingSprite floorSprite = new BoundingSprite(true, imagePath);
+											BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+									        Physics.addFloorEntity(floor);
+										}
+									}
+									else {
+										if ((boolean)eachProp.get("wall").equals("true")) {
+											BoundingSprite floorSprite = new BoundingSprite(false, imagePath);
+											BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+									        Physics.addFloorEntity(floor);
+										}
 									}
 								}
 							} // end if
