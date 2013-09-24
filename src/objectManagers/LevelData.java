@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,8 +38,6 @@ public class LevelData {
 	private int xDistanceFromLeftWall = 0;
 	private int levelWidth = 800;
 	private float levelWidthPixels = (float) getLevelWidth() * Utils.scaleXValue;
-	
-	private static Logger logger = Logger.getLogger(LevelData.class);
 
 	public LevelData (PApplet gameScreen){
 		loadLevel();
@@ -57,10 +54,9 @@ public class LevelData {
 	public void loadLevel() {
 		
 		try {
-		    
-		    if(logger.isInfoEnabled()) logger.info("Loading level one...");
-
-			Object raw = parser.parse(new FileReader("levels/level1.json"));
+			// Get the Level JSON file and cast it to a JSONObject
+			String path = "../levels/level1.json";
+			Object raw = parser.parse(new FileReader(path));
 			level = (JSONObject)raw; 
 			
 			// Extract high-level level data from JSON
@@ -133,14 +129,19 @@ public class LevelData {
 									Map.Entry pairs = (Map.Entry)it.next();
 									JSONObject eachProp = (JSONObject)pairs.getValue();
 									
-									if ((boolean)eachProp.get("floor").equals("true")) {
-										BoundingSprite floorSprite = new BoundingSprite(true, imagePath);
-										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
-								        Physics.addFloorEntity(floor);
-									} else if ((boolean)eachProp.get("wall").equals("true")) {
-										BoundingSprite floorSprite = new BoundingSprite(false, imagePath);
-										BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
-								        Physics.addFloorEntity(floor);
+									if (!(eachProp.get("floor") == null)) {
+										if ((boolean)eachProp.get("floor").equals("true")) {
+											BoundingSprite floorSprite = new BoundingSprite(true, imagePath);
+											BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+									        Physics.addFloorEntity(floor);
+										}
+									}
+									else {
+										if ((boolean)eachProp.get("wall").equals("true")) {
+											BoundingSprite floorSprite = new BoundingSprite(false, imagePath);
+											BoundingObject floor = new BoundingObject(gameScreen, (int)tileXPos, (int)tileYPos, floorSprite);
+									        Physics.addFloorEntity(floor);
+										}
 									}
 								}
 							} // end if
@@ -148,9 +149,6 @@ public class LevelData {
 					} // end for
 				} // end if
 			} // end for
-			
-			if(logger.isInfoEnabled()) logger.info("Loaded level one.");
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
