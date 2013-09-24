@@ -39,6 +39,10 @@ public class InstructionScreen {
 	    
 	}
 	
+	/**
+	 * Note that if this method is called, the game will try to display another screen.  False to "move left" and true to "move right".
+	 * @param goRight
+	 */
 	public void changeScreenNumber(boolean goRight){
 	    
 	    if (goRight){

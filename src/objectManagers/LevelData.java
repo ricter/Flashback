@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,6 +39,8 @@ public class LevelData {
 	private int xDistanceFromLeftWall = 0;
 	private int levelWidth = 800;
 	private float levelWidthPixels = (float) getLevelWidth() * Utils.scaleXValue;
+	
+	private static Logger logger = Logger.getLogger(LevelData.class);
 
 	public LevelData (PApplet gameScreen){
 		loadLevel();
@@ -54,6 +57,8 @@ public class LevelData {
 	public void loadLevel() {
 		
 		try {
+		    
+		    if(logger.isInfoEnabled()) logger.info("Loading level one...");
 			Object raw = parser.parse(new FileReader("levels/level1.json"));
 			level = (JSONObject)raw; 
 			
@@ -114,6 +119,9 @@ public class LevelData {
 					} // end for
 				} // end if
 			} // end for
+			
+			if(logger.isInfoEnabled()) logger.info("Loaded level one.");
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

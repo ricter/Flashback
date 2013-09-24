@@ -3,6 +3,9 @@ package objectManagers;
 import gameObjects.FlyingMonster;
 import gameObjects.GroundMonster;
 import main.Flashback;
+
+import org.apache.log4j.Logger;
+
 import physics.Physics;
 import processing.core.PApplet;
 
@@ -26,6 +29,8 @@ public class MonsterSpawner {
 	private float curGroundSpawnRate;
 	private float groundSpawnTimer = 0;
 
+	private static Logger logger = Logger.getLogger(MonsterSpawner.class);
+	
 	public MonsterSpawner(PApplet gameScreen) {
 
 		this.gameScreen= gameScreen; 
@@ -41,7 +46,7 @@ public class MonsterSpawner {
 
 			curAirSpawnRate = gameScreen.random(minAirSpawnRate, maxAirSpawnRate);
 			airSpawnTimer = 0;
-			//spawnAirEnemy();
+			spawnAirEnemy();
 
 		}
 
@@ -50,7 +55,7 @@ public class MonsterSpawner {
 
 			curGroundSpawnRate = gameScreen.random(minGroundSpawnRate, maxGroundSpawnRate);
 			groundSpawnTimer = 0;
-			//spawnGroundEnemy();
+			spawnGroundEnemy();
 
 		}
 
@@ -58,6 +63,7 @@ public class MonsterSpawner {
 
 	void spawnAirEnemy() {
 
+	    if(logger.isDebugEnabled()) logger.debug("Spawning air enemy...");
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
 		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()
@@ -71,6 +77,7 @@ public class MonsterSpawner {
 
 	void spawnGroundEnemy() {
 
+	    if(logger.isDebugEnabled()) logger.debug("Spawning ground enemy...");
 		// get offScreenAir position
 		int bias = gameScreen.round(gameScreen.random(-1, 1));
 		float spawnPointX = Flashback.levelData.getxDistanceFromLeftWall()

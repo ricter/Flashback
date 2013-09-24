@@ -11,10 +11,10 @@ public abstract class Sprite {
 	
 	PImage currentImage;
 	
-    private int collisionXOffset;
-    private int collisionYOffset;
-    private int collisionWidth;
-    private int collisionHeight;
+    int collisionXOffset;
+    int collisionYOffset;
+    int collisionWidth;
+    int collisionHeight;
     
     boolean movingImage;
     private int imageNumber = 0;

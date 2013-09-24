@@ -21,6 +21,15 @@ public class PlayerSprite extends Sprite{
 
 	public PlayerSprite() {
 		super(idleImage);
+		
+		/*
+		 * These are arbitrary values chosen based on what "looks good".  Feel free to adjust as you see fit.
+		 * Essentially the point here was de-couple image size and collision hitbox for the player, at least.
+		 */
+		this.collisionWidth = 113;
+        this.collisionHeight = 193;
+        this.collisionXOffset = 27;
+        this.collisionYOffset = 5;
 	}
 
 	public PlayerSprite(int width, int height, int xOffset, int yOffset) {
@@ -52,7 +61,7 @@ public class PlayerSprite extends Sprite{
 	
 	@Override
 	public void draw(float x, float y, boolean flip) {
-		
+	    
 		if (isJumping){
 			
 			if(fpsCount++ > animationSpeed) {
@@ -90,7 +99,9 @@ public class PlayerSprite extends Sprite{
 			gameScreen.popMatrix();
 
 		} else {
+		    
 			gameScreen.image(currentImage, x, y);
+			
 		}
 		
 	}

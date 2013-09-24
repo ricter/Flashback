@@ -77,6 +77,7 @@ public class Flashback extends PApplet {
 	 */
 	public static void main(String[] args) {
 		
+	    if(logger.isInfoEnabled()) logger.info("Starting Flashback.");
 	    PApplet.main(new String[] { "--present", "main.Flashback" });
         
 	}
@@ -86,6 +87,7 @@ public class Flashback extends PApplet {
 	 */
 	public void addPlayerToStart() {
 
+	    if(logger.isInfoEnabled()) logger.info("Adding player to start.");
 		player = new Player(this, X_RESOLUTION / 2, Y_RESOLUTION / 2, playerSprite, playerArmSprite);
 		Physics.addPlayerEntity(player);
 
