@@ -55,7 +55,7 @@ public class LevelData {
 		
 		try {
 			// Get the Level JSON file and cast it to a JSONObject
-			String path = "../levels/level1.json";
+			String path = "levels/level1.json";
 			Object raw = parser.parse(new FileReader(path));
 			level = (JSONObject)raw; 
 			
