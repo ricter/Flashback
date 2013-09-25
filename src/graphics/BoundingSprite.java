@@ -2,6 +2,7 @@ package graphics;
 
 import java.util.ArrayList;
 
+import processing.core.PConstants;
 import processing.core.PImage;
 
 public class BoundingSprite extends Sprite {
@@ -21,6 +22,37 @@ public class BoundingSprite extends Sprite {
     	super(floorImage);
     	this.tryLoadImage(spritePath);
         this.isFloor = isFloor;
+    }
+    
+    public BoundingSprite(boolean isFloor, String spritePath, int xOffset, int yOffset, int Width, int Height, int TotalWidth, int TotalHeight) {
+    	super(floorImage);
+    	this.tryLoadTileset(spritePath, xOffset, yOffset, Width, Height, TotalWidth, TotalHeight);
+        this.isFloor = isFloor;
+    }
+    
+    private void tryLoadTileset(String path, int xOffset, int yOffset, int Width, int Height, int TotalWidth, int TotalHeight) {
+		String offsetPath  = path + Integer.toString(xOffset) + Integer.toString(yOffset);
+		
+    	if (loadedImages.contains(offsetPath)) {	
+    		this.currentImage = loadedPImages.get(loadedImages.indexOf(offsetPath));
+    	} else {
+    		PImage newFloorImage = gameScreen.loadImage(path);
+    		PImage tmpImage;
+    		
+    		int cols = TotalWidth / Width;
+    		int rows = TotalHeight / Height;
+    		
+    		for (int row = 0; row < rows; row++) {
+    			for (int col = 0; col < cols; col++) {
+    				tmpImage = gameScreen.createImage(Width, Height, PConstants.ARGB);
+    				tmpImage.copy(newFloorImage, col * Width, row * Height, Width, Height, 0, 0, Width, Height);
+    	    		loadedImages.add(path + Integer.toString(col) + Integer.toString(row));
+    	    		loadedPImages.add(tmpImage);
+    			}
+    		}
+    		
+    		this.currentImage = loadedPImages.get(loadedImages.indexOf(offsetPath));
+    	}
     }
     
     private void tryLoadImage(String path)
